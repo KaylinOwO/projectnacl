@@ -101,7 +101,7 @@ void Menu::CreateGUI()
 		);
 
 	Tabs.AddTab(
-		new Tab("HVH", {
+		new Tab("HvH", {
 			new Groupbox("General",
 			{
 				&gHvH.resolver,
