@@ -7,10 +7,7 @@ The source is currently DETECTED but with junk code and vmprotect you should be 
 ## Important
 
 Project NaCl is a pasta only project.
-The project was discontinued on June 24th, 2018.
-
-## Community
-The Discord server has been removed due to the discontinuation of this project.
+The projects development is off and on.
 
 ## Overview
 
@@ -29,4 +26,5 @@ NaCl is a potassium edit with new features such as
 * channel32 - Being A Generally Nice Guy And Helping Me With Some Shit.
 * Bux - Helped Me With Getting FSN Setup, Helped With A Lot of Other Features.
 * Dumpster-Fire Developers - Auto-Airblast Code
+* cademtz - Sparkly Rewrite UI
 
