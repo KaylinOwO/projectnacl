@@ -61,11 +61,13 @@ void Menu::CreateGUI()
 		new Tab("Visuals", {
 			new Groupbox("ESP",{
 				&gESP.enabled,
+				&gESP.enemyonly,
 				&gESP.box,
 				&gESP.name,
 				&gESP.tfclass,
 				&gESP.health,
 				&gESP.bones,
+				&gESP.viewlines,
 				&gESP.ignorecloaked,
 				&gESP.ignoredisguised,
 			}, GROUP_WIDTH),
