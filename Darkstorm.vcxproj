@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{53348295-68AD-4FAE-8203-4B68A6C6A6E6}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>basehook</RootNamespace>
+    <ProjectName>Project NaCl</ProjectName>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <TargetName>NaCl</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <TargetName>NaCl</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;BASEHOOK_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level2</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;BASEHOOK_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\D;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <ExceptionHandling>Async</ExceptionHandling>
+      <StringPooling>true</StringPooling>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Aimbot.cpp" />
+    <ClCompile Include="AutoAirblast.cpp" />
+    <ClCompile Include="CBaseEntity.cpp" />
+    <ClCompile Include="CDraw.cpp" />
+    <ClCompile Include="CDrawManager.cpp" />
+    <ClCompile Include="CEtags.cpp" />
+    <ClCompile Include="Client.cpp" />
+    <ClCompile Include="CMenu.cpp" />
+    <ClCompile Include="CNetVars.cpp" />
+    <ClCompile Include="Controls.cpp" />
+    <ClCompile Include="ConVar.cpp" />
+    <ClCompile Include="cvwrapper.cpp" />
+    <ClCompile Include="DLLMain.cpp" />
+    <ClCompile Include="ESP.cpp" />
+    <ClCompile Include="HvH.cpp" />
+    <ClCompile Include="Log.cpp" />
+    <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="Misc.cpp" />
+    <ClCompile Include="Panels.cpp" />
+    <ClCompile Include="CSignature.cpp" />
+    <ClCompile Include="QAngle.cpp" />
+    <ClCompile Include="Radar.cpp" />
+    <ClCompile Include="RemoveCondExploit.cpp" />
+    <ClCompile Include="Styles.cpp" />
+    <ClCompile Include="Triggerbot.cpp" />
+    <ClCompile Include="Util.cpp" />
+    <ClCompile Include="VMTHooks.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Aimbot.h" />
+    <ClInclude Include="AutoAirblast.h" />
+    <ClInclude Include="bspflags.h" />
+    <ClInclude Include="CDraw.h" />
+    <ClInclude Include="CDrawManager.h" />
+    <ClInclude Include="CEtags.h" />
+    <ClInclude Include="CGlobalVars.h" />
+    <ClInclude Include="Client.h" />
+    <ClInclude Include="CMenu.h" />
+    <ClInclude Include="CNetVars.h" />
+    <ClInclude Include="Color.h" />
+    <ClInclude Include="Controls.h" />
+    <ClInclude Include="ConVar.h" />
+    <ClInclude Include="cvwrapper.h" />
+    <ClInclude Include="Draw utils.h" />
+    <ClInclude Include="ESP.h" />
+    <ClInclude Include="getvfunc.h" />
+    <ClInclude Include="HvH.h" />
+    <ClInclude Include="Icons.h" />
+    <ClInclude Include="KeyEnum.h" />
+    <ClInclude Include="Log.h" />
+    <ClInclude Include="Menu.h" />
+    <ClInclude Include="Misc.h" />
+    <ClInclude Include="Panels.h" />
+    <ClInclude Include="QAngle.h" />
+    <ClInclude Include="Radar.h" />
+    <ClInclude Include="RemoveCondExploit.h" />
+    <ClInclude Include="SDK.h" />
+    <ClInclude Include="CSignature.h" />
+    <ClInclude Include="studio.h" />
+    <ClInclude Include="Styles.h" />
+    <ClInclude Include="Triggerbot.h" />
+    <ClInclude Include="Util.h" />
+    <ClInclude Include="Vector.h" />
+    <ClInclude Include="Vector2.h" />
+    <ClInclude Include="Vector2D.h" />
+    <ClInclude Include="VMTHooks.h" />
+    <ClInclude Include="WeaponList.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

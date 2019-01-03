@@ -1,0 +1,252 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Panels.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="CDrawManager.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Client.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="DLLMain.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="VMTHooks.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="CSignature.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="CNetVars.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="CBaseEntity.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="CMenu.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Aimbot.cpp">
+      <Filter>Modules\Aimbot</Filter>
+    </ClCompile>
+    <ClCompile Include="Triggerbot.cpp">
+      <Filter>Modules\Triggerbot</Filter>
+    </ClCompile>
+    <ClCompile Include="ESP.cpp">
+      <Filter>Modules\ESP</Filter>
+    </ClCompile>
+    <ClCompile Include="Misc.cpp">
+      <Filter>Modules\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="ConVar.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="CEtags.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="cvwrapper.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Radar.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="QAngle.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="HvH.cpp">
+      <Filter>Modules\HvH</Filter>
+    </ClCompile>
+    <ClCompile Include="RemoveCondExploit.cpp">
+      <Filter>Modules\Time Shift</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoAirblast.cpp">
+      <Filter>Modules\Auto-Airblast</Filter>
+    </ClCompile>
+    <ClCompile Include="Styles.cpp">
+      <Filter>Menu\Styles</Filter>
+    </ClCompile>
+    <ClCompile Include="CDraw.cpp">
+      <Filter>Menu\CDraw</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Menu\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Controls.cpp">
+      <Filter>Menu\Controls</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CDrawManager.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="CGlobalVars.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Client.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="getvfunc.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Panels.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponList.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="VMTHooks.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="CSignature.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="CNetVars.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="bspflags.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="CMenu.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Aimbot.h">
+      <Filter>Modules\Aimbot</Filter>
+    </ClInclude>
+    <ClInclude Include="Triggerbot.h">
+      <Filter>Modules\Triggerbot</Filter>
+    </ClInclude>
+    <ClInclude Include="studio.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="ESP.h">
+      <Filter>Modules\ESP</Filter>
+    </ClInclude>
+    <ClInclude Include="Misc.h">
+      <Filter>Modules\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="ConVar.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="CEtags.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="cvwrapper.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Radar.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="QAngle.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="HvH.h">
+      <Filter>Modules\HvH</Filter>
+    </ClInclude>
+    <ClInclude Include="RemoveCondExploit.h">
+      <Filter>Modules\Time Shift</Filter>
+    </ClInclude>
+    <ClInclude Include="AutoAirblast.h">
+      <Filter>Modules\Auto-Airblast</Filter>
+    </ClInclude>
+    <ClInclude Include="Styles.h">
+      <Filter>Menu\Styles</Filter>
+    </ClInclude>
+    <ClInclude Include="CDraw.h">
+      <Filter>Menu\CDraw</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyEnum.h">
+      <Filter>Menu\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Draw utils.h">
+      <Filter>Menu\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Icons.h">
+      <Filter>Menu\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Menu\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Controls.h">
+      <Filter>Menu\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector2D.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{79b023fd-cbc8-41db-bfda-b06ff3b945f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{7561bd3e-f399-43c0-80fd-202de503f606}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Menu">
+      <UniqueIdentifier>{3298774b-5601-4018-b823-c3765e1b6b11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Menu\UI">
+      <UniqueIdentifier>{c7a3bf35-6f90-4de0-8ba8-4f835ca1d9d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Menu\Styles">
+      <UniqueIdentifier>{d4ac3042-d889-4bcb-9d44-9a0b8ab677dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Menu\Headers">
+      <UniqueIdentifier>{3b648864-959c-4c93-8b2a-d8621ec9237c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Menu\CDraw">
+      <UniqueIdentifier>{f721f7a0-626a-4c91-9260-0742ab351f0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Menu\Controls">
+      <UniqueIdentifier>{f2106817-43dd-442e-a813-1228ea4bc7c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules">
+      <UniqueIdentifier>{bd4db70f-c9e9-4991-848f-748551954a06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules\Aimbot">
+      <UniqueIdentifier>{4f190136-d775-450b-9049-6a6fdd0ab7a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules\Triggerbot">
+      <UniqueIdentifier>{d045afc8-c948-46e8-b3fa-9c7469fb9345}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules\ESP">
+      <UniqueIdentifier>{3f8592fd-56b1-487a-bf76-227058a23a9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules\Misc">
+      <UniqueIdentifier>{338f8ff1-8354-487f-9830-cc45a33039d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules\HvH">
+      <UniqueIdentifier>{0112088d-3049-4d72-92c0-479950f066ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules\Time Shift">
+      <UniqueIdentifier>{9b4d42ba-f6e7-4f94-b020-6ca7aa004981}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules\Auto-Airblast">
+      <UniqueIdentifier>{36eafdf6-43d2-4489-8f42-7d951f9d8f05}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
