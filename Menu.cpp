@@ -69,7 +69,6 @@ void Menu::CreateGUI()
 				&gESP.bones,
 				&gESP.viewlines,
 				&gESP.ignorecloaked,
-				&gESP.ignoredisguised,
 			}, GROUP_WIDTH),
 		new Groupbox("Misc",{
 				&gESP.nozoom,
