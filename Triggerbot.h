@@ -8,7 +8,7 @@ public:
 	void Run(CBaseEntity* pLocal, CUserCmd* pCommand);
 
 	Checkbox enabled = Checkbox("Enabled");
-	Listbox key = Listbox("Key", { "None", "Mouse 3", "Mouse 4", "Mouse 5", "Shift", "Alt", "F" }, 1);
+	Listbox key = Listbox("Key", { "None", "Mouse 3", "Mouse 4", "Mouse 5", "Shift", "Alt", "F" }, 0);
 	Checkbox headonly = Checkbox("Head Only");
 	Checkbox cloaked = Checkbox("Ignore Cloaked");
 

@@ -20,6 +20,7 @@ public:
 	Checkbox speedcrouch = Checkbox("Speed Crouch");
 	Checkbox nopush = Checkbox("No Push");
 	Checkbox cscreenshots = Checkbox("Clean Screenshots");
+	Checkbox purebypass = Checkbox("Pure Bypass");
 
 	Checkbox flag = Checkbox("Fakelag");
 	Slider flagamount = Slider("Fakelag Amount", 0, 0, 15, 1);

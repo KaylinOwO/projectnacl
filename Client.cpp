@@ -95,7 +95,7 @@ void __fastcall FrameStageNotifyThink(PVOID CHLClient, void *_this, ClientFrameS
 
 			bool resolver = false;
 
-			if (Util->IsKeyPressed(gCvars.aimbot_resolver_key))
+			if (Util->IsKeyPressedMisc(gCvars.aimbot_resolver_key))
 			{
 				resolver = !resolver;
 			}
