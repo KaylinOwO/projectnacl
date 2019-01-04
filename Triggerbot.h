@@ -13,8 +13,9 @@ public:
 	Checkbox cloaked = Checkbox("Ignore Cloaked");
 
 	Checkbox backstab = Checkbox("Auto Backstab");
+	Checkbox stickydetonate = Checkbox("Auto Sticky Detonate");
 	Checkbox airblast = Checkbox("Auto Airblast");
-	Checkbox airblastrage = Checkbox("Rage Mode");
+	Checkbox airblastrage = Checkbox("Aim @ Projectiles");
 	//Checkbox waitforcharge = Checkbox("Wait For Charge");
 };
 

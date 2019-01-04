@@ -140,9 +140,3 @@ public:
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 	};
 };
-
-class COffsets
-{
-public:
-	int iKeyEventOffset = 20, iCreateMoveOffset = 21, iPaintTraverseOffset = 41;
-};

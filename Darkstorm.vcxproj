@@ -64,7 +64,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <WarningLevel>Level2</WarningLevel>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
@@ -96,6 +96,7 @@
     <ClCompile Include="CDrawManager.cpp" />
     <ClCompile Include="CEtags.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="CMat.cpp" />
     <ClCompile Include="CMenu.cpp" />
     <ClCompile Include="CNetVars.cpp" />
     <ClCompile Include="Controls.cpp" />
@@ -104,14 +105,17 @@
     <ClCompile Include="DLLMain.cpp" />
     <ClCompile Include="ESP.cpp" />
     <ClCompile Include="HvH.cpp" />
+    <ClCompile Include="KeyValues.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Misc.cpp" />
+    <ClCompile Include="Offsets.cpp" />
     <ClCompile Include="Panels.cpp" />
     <ClCompile Include="CSignature.cpp" />
     <ClCompile Include="QAngle.cpp" />
     <ClCompile Include="Radar.cpp" />
     <ClCompile Include="RemoveCondExploit.cpp" />
+    <ClCompile Include="Sticky.cpp" />
     <ClCompile Include="Styles.cpp" />
     <ClCompile Include="Triggerbot.cpp" />
     <ClCompile Include="Util.cpp" />
@@ -126,6 +130,7 @@
     <ClInclude Include="CEtags.h" />
     <ClInclude Include="CGlobalVars.h" />
     <ClInclude Include="Client.h" />
+    <ClInclude Include="CMat.h" />
     <ClInclude Include="CMenu.h" />
     <ClInclude Include="CNetVars.h" />
     <ClInclude Include="Color.h" />
@@ -138,15 +143,19 @@
     <ClInclude Include="HvH.h" />
     <ClInclude Include="Icons.h" />
     <ClInclude Include="KeyEnum.h" />
+    <ClInclude Include="KeyValues.h" />
     <ClInclude Include="Log.h" />
+    <ClInclude Include="Materials.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Misc.h" />
+    <ClInclude Include="Offsets.h" />
     <ClInclude Include="Panels.h" />
     <ClInclude Include="QAngle.h" />
     <ClInclude Include="Radar.h" />
     <ClInclude Include="RemoveCondExploit.h" />
     <ClInclude Include="SDK.h" />
     <ClInclude Include="CSignature.h" />
+    <ClInclude Include="Sticky.h" />
     <ClInclude Include="studio.h" />
     <ClInclude Include="Styles.h" />
     <ClInclude Include="Triggerbot.h" />

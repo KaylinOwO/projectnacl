@@ -7,6 +7,7 @@
 #include "CDraw.h"
 #include "Styles.h"
 #include "Misc.h"
+#include "CMat.h"
 
 #include "Radar.h"
 CScreenSize gScreenSize;
@@ -106,8 +107,8 @@ void Intro( void )
 	{
 		gDrawManager.Initialize(); //Initalize the drawing class.
 		gDraw.Init();
+		gMat.Initialize();
 		InitTextures();
-
 		gNetVars.Initialize();
 		gMenu.CreateGUI();
 	}

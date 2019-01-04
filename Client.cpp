@@ -8,6 +8,8 @@
 #include "HvH.h"
 #include "ESP.h"
 #include "AutoAirblast.h"
+#include "Sticky.h"
+#include "CMat.h"
 #include <intrin.h>
 
 Vector qLASTTICK;
@@ -55,6 +57,7 @@ bool __fastcall Hooked_CreateMove(PVOID ClientMode, int edx, float input_sample_
 		gHvH.Run(pLocal, pCommand, bSendPacket);
 		gTrigger.Run(pLocal, pCommand);
 		gBlast.Run(pLocal, pCommand);
+		gSticky.Run(pLocal, pCommand);
 	}
 	catch (...)
 	{
@@ -259,6 +262,28 @@ void __fastcall FrameStageNotifyThink(PVOID CHLClient, void *_this, ClientFrameS
 
 	VMTManager &HTCCNKBRKYLC = VMTManager::GetHook(CHLClient);
 	return HTCCNKBRKYLC.GetMethod<void(__fastcall *)(PVOID, void *, ClientFrameStage_t)>(35)(CHLClient, _this, Stage);
+}
+
+void __stdcall Hooked_DrawModelExecute(const DrawModelState_t &state, const ModelRenderInfo_t &pInfo, matrix3x4 *pCustomBoneToWorld)
+{
+	VMTManager& hook = VMTManager::GetHook(gInts.ModelRender);
+	const char* pszModelName = gInts.ModelInfo->GetModelName((DWORD*)pInfo.pModel);
+	auto CallOriginal = hook.GetMethod<DrawModelExecuteFn>(19);
+	try
+	{
+		if (pInfo.pModel)
+			gESP.DrawModelExecute(state, pInfo, pCustomBoneToWorld, CallOriginal);
+
+		if (gESP.nohands.value && strstr(pszModelName, "arms"))
+			return;
+	}
+	catch (...)
+	{
+		MessageBox(NULL, "Failed Hooked_DrawModelExecute()", "Error", MB_OK);
+		return CallOriginal(gInts.ModelRender, state, pInfo, pCustomBoneToWorld);
+	}
+	CallOriginal(gInts.ModelRender, state, pInfo, pCustomBoneToWorld);
+	gMat.ResetMaterial();
 }
 //============================================================================================
 

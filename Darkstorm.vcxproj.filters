@@ -82,6 +82,18 @@
     <ClCompile Include="Controls.cpp">
       <Filter>Menu\Controls</Filter>
     </ClCompile>
+    <ClCompile Include="Sticky.cpp">
+      <Filter>Modules\Auto-Sticky Detonate</Filter>
+    </ClCompile>
+    <ClCompile Include="CMat.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyValues.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Offsets.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CDrawManager.h">
@@ -134,9 +146,6 @@
     </ClInclude>
     <ClInclude Include="Aimbot.h">
       <Filter>Modules\Aimbot</Filter>
-    </ClInclude>
-    <ClInclude Include="Triggerbot.h">
-      <Filter>Modules\Triggerbot</Filter>
     </ClInclude>
     <ClInclude Include="studio.h">
       <Filter>Headers</Filter>
@@ -198,6 +207,24 @@
     <ClInclude Include="Vector2D.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Sticky.h">
+      <Filter>Modules\Auto-Sticky Detonate</Filter>
+    </ClInclude>
+    <ClInclude Include="Triggerbot.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="Materials.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="CMat.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyValues.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="Offsets.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Headers">
@@ -247,6 +274,9 @@
     </Filter>
     <Filter Include="Modules\Auto-Airblast">
       <UniqueIdentifier>{36eafdf6-43d2-4489-8f42-7d951f9d8f05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules\Auto-Sticky Detonate">
+      <UniqueIdentifier>{a158b6f9-fb59-4dd7-b679-8620744acfb2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

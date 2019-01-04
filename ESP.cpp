@@ -283,6 +283,82 @@ void CESP::Player_ESP(CBaseEntity* pLocal, CBaseEntity* pEntity)
 		//gRadar.DrawRadarPoint(pEntity->GetAbsOrigin(), pLocal->GetAbsOrigin(), QAngle(b.x, b.y, b.z), pEntity, clrTeam);
 }
 
+// These hardcoded color arrays will be improved later
+
+static SColor colors_team[] =
+{
+	SColor(0), //Dummy
+	SColor(160), // 1 Teamone (UNUSED)
+	SColor(186, 52, 53), // 2 Red
+	SColor(0, 128, 255), // 3 Blu
+	SColor(0) // 4 Teamfour (UNUSED) 
+};
+
+static SColor colors_team_light[] =
+{
+	SColor(0), //Dummy
+	SColor(160), // 1 Teamone (UNUSED)
+	SColor(240, 100, 90), // 2 Red
+	SColor(100, 150, 240), // 3 Blu
+	SColor(0) // 4 Teamfour (UNUSED) 
+};
+
+#include "Client.h"
+#include "CMat.h"
+void CESP::DrawModelExecute(const DrawModelState_t &state, const ModelRenderInfo_t &pInfo, matrix3x4 *pCustomBoneToWorld, DrawModelExecuteFn Original)
+{
+	if (!player_enabled.value)
+		return;
+
+	CBaseEntity* entity;
+	if (!(entity = GetBaseEntity(pInfo.entity_index)))
+		return;
+	ent_id type = entity->Type();
+	if (type != ent_id::CTFPlayer)
+		return;
+
+	// Normal visibility will just run once
+	// And "Always" visibility will run twice with the same mat
+	bool bReset = player_enabled.value > 2;
+
+	// Stubbed for now. More materials later.
+	Matptr desired;
+
+	if (gESP.chamsmat.value == 0)
+		desired = gMat.glow;
+	else if (gESP.chamsmat.value == 1)
+		desired = gMat.shaded;
+	else if (gESP.chamsmat.value == 2)
+		desired = gMat.shiny;
+	else if (gESP.chamsmat.value == 3)
+		desired = gMat.wireframe;
+	
+	if (!desired)
+		return;
+
+	byte team = entity->GetTeamNum();
+	byte localteam = entity->GetTeamNum();
+
+	//if (team == localteam)
+		//return;
+
+	SColor color = player_mat.bDef ? colors_team_light[team] : player_mat.color;
+
+	desired->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, player_enabled.value != 1);
+	gMat.ForceMaterial(color, desired);
+
+	// "Behind walls" / "always" requires a second render with ignorez before the original
+	if (player_enabled.value != 1)
+	{
+		Original(gInts.ModelRender, state, pInfo, pCustomBoneToWorld);
+		if (player_enabled.value == 2) // Now we will render a normal visibility model with "always" enabled
+			desired->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, false);
+	}
+
+	if (bReset)
+		gMat.ResetMaterial();
+}
+
 
 	 //My code, but creds to f1ssion for giving me the idea
 void CESP::DrawBone(CBaseEntity* pEntity, int* iBones, int count, Color clrCol)
@@ -303,3 +379,5 @@ void CESP::DrawBone(CBaseEntity* pEntity, int* iBones, int count, Color clrCol)
 		gDrawManager.DrawLine(vScr1.x, vScr1.y, vScr2.x, vScr2.y, clrCol);
 	}
 }
+
+unordered_map<MaterialHandle_t, SColor> worldmat_new, worldmat_old;

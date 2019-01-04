@@ -2,13 +2,12 @@
 #include "Client.h"
 #include "Panels.h"
 #include "Menu.h"
-
+#include "CMat.h"
 #include <Windows.h>
 #pragma comment(lib, "Winmm.lib")
 
 float SteamAPI_ServerNonLan = false;
 
-COffsets gOffsets;
 CGlobalVariables gCvars;
 CInterfaces gInts;
 
@@ -18,6 +17,8 @@ CreateInterface_t VGUIFactory = NULL;
 CreateInterface_t VGUI2Factory = NULL;
 CreateInterface_t CvarFactory = NULL;
 CreateInterfaceFn SteamFactory = NULL;
+CreateInterfaceFn MaterialSystemFactory = NULL;
+
 
 DWORD WINAPI dwMainThread( LPVOID lpArguments )
 {
@@ -32,23 +33,30 @@ DWORD WINAPI dwMainThread( LPVOID lpArguments )
 		if (IsOnlineServer)
 		    return 0;
 
+		gOffsets.GetOffsets();
+
 		VMTBaseManager* clientHook = new VMTBaseManager();
 		VMTBaseManager* clientModeHook = new VMTBaseManager();
 		VMTBaseManager* panelHook = new VMTBaseManager();
+		VMTBaseManager* defRenderHook = new VMTBaseManager();
 
 		ClientFactory = ( CreateInterfaceFn ) GetProcAddress( gSignatures.GetModuleHandleSafe( "client.dll" ), "CreateInterface" );
 		EngineFactory = (CreateInterfaceFn)GetProcAddress(gSignatures.GetModuleHandleSafe("engine.dll"), "CreateInterface");
 		VGUIFactory = (CreateInterfaceFn)GetProcAddress(gSignatures.GetModuleHandleSafe("vguimatsurface.dll"), "CreateInterface");
 		CvarFactory = (CreateInterfaceFn)GetProcAddress(gSignatures.GetModuleHandleSafe("vstdlib.dll"), "CreateInterface");
 		SteamFactory = (CreateInterfaceFn)GetProcAddress(GetModuleHandleA("SteamClient.dll"), "CreateInterface");
+		MaterialSystemFactory = (CreateInterfaceFn)GetProcAddress(GetModuleHandleA("MaterialSystem.dll"), "CreateInterface");
 
 		gInts.Client = ( CHLClient* )ClientFactory( "VClient017", NULL);
 		gInts.EntList = ( CEntList* ) ClientFactory( "VClientEntityList003", NULL );
 		gInts.Engine = ( EngineClient* ) EngineFactory( "VEngineClient013", NULL );
 		gInts.Surface = ( ISurface* ) VGUIFactory( "VGUI_Surface030", NULL );
+		gInts.RenderView = (CRenderView*)EngineFactory("VEngineRenderView014", NULL);
+		gInts.MatSystem = (CMaterialSystem*)MaterialSystemFactory("VMaterialSystem081", NULL);
 		gInts.EngineTrace = ( IEngineTrace* ) EngineFactory( "EngineTraceClient003", NULL );
 		gInts.ModelInfo = ( IVModelInfo* ) EngineFactory( "VModelInfoClient006", NULL );
 		gInts.cvar = (ICvar*)CvarFactory("VEngineCvar004", NULL);
+		gInts.ModelRender = (CModelRender*)EngineFactory("VEngineModel016", NULL);
 		gInts.EventManager = (IGameEventManager2*)EngineFactory("GAMEEVENTSMANAGER002", NULL);
 		gInts.steamclient = (ISteamClient017*)SteamFactory("SteamClient017", NULL);
 
@@ -65,6 +73,7 @@ DWORD WINAPI dwMainThread( LPVOID lpArguments )
 		XASSERT(gInts.EngineTrace);
 		XASSERT(gInts.ModelInfo);
 		XASSERT(gInts.cvar);
+		XASSERT(gInts.ModelRender);
 		XASSERT(gInts.EventManager);
 		XASSERT(gInts.steamclient);
 		XASSERT(gInts.steamfriends);
@@ -93,8 +102,6 @@ DWORD WINAPI dwMainThread( LPVOID lpArguments )
 		XASSERT(dwClientModeAddress);
 		gInts.ClientMode = **(ClientModeShared***)(dwClientModeAddress + 2);
 		LOGDEBUG("g_pClientModeShared_ptr client.dll+0x%X", (DWORD)gInts.ClientMode - dwClientBase);
-		
-
 
 		clientHook->Init(gInts.Client);
 		clientHook->HookMethod(&Hooked_KeyEvent, gOffsets.iKeyEventOffset);
@@ -109,6 +116,10 @@ DWORD WINAPI dwMainThread( LPVOID lpArguments )
 		clientHook->HookMethod(&FrameStageNotifyThink, 35);
 		clientHook->Rehook();
 
+		defRenderHook->Init(gInts.ModelRender);
+		defRenderHook->HookMethod(&Hooked_DrawModelExecute, 19);
+		defRenderHook->Rehook();
+
 		HWND thisWindow;
 		while (!(thisWindow = FindWindow("Valve001", NULL)))
 			Sleep(500);
@@ -116,6 +127,7 @@ DWORD WINAPI dwMainThread( LPVOID lpArguments )
 	}
 	return 0; //The thread has been completed, and we do not need to call anything once we're done. The call to Hooked_PaintTraverse is now our main thread.
 }
+
 
 BOOL APIENTRY DllMain(HMODULE hInstance, DWORD dwReason, LPVOID lpReserved)
 {

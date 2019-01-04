@@ -51,6 +51,7 @@ void Menu::CreateGUI()
 
 			new Groupbox("Misc",{
 				&gTrigger.backstab,
+				&gTrigger.stickydetonate,
 				&gTrigger.airblast,
 				&gTrigger.airblastrage,
 			}, GROUP_WIDTH),
@@ -68,11 +69,15 @@ void Menu::CreateGUI()
 				&gESP.health,
 				&gESP.bones,
 				&gESP.viewlines,
+				&gESP.player_enabled,
+				&gESP.chamsmat,
+				&gESP.player_mat,
 				&gESP.ignorecloaked,
 			}, GROUP_WIDTH),
 		new Groupbox("Misc",{
 				&gESP.nozoom,
 				&gESP.noscope,
+				&gESP.nohands,
 				&gESP.thirdperson,
 			}, GROUP_WIDTH)
 		})

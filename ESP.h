@@ -1,5 +1,6 @@
 #pragma once
 #include "SDK.h"
+#include "Client.h"
 
 class CESP
 {
@@ -16,12 +17,18 @@ public:
 	Checkbox bones = Checkbox("Bones");
 	Checkbox status = Checkbox("Status");
 	Checkbox viewlines = Checkbox("View Lines");
+	Listbox player_enabled = Listbox("Chams", { "Disabled", "Default Visibility", "Always Visible", "Only Behind Walls" }, 0);
+	Listbox chamsmat = Listbox("Chams Material", { "Flat", "Shaded", "Shiny", "Wireframe" }, 0);
+	ColorPicker player_mat = ColorPicker("Material Color", SColor(200));
 	Checkbox ignorecloaked = Checkbox("Ignore Cloaked");
 	Checkbox ignoredisguised = Checkbox("Ignore Disguised");
 
 	Checkbox nozoom = Checkbox("No Zoom");
 	Checkbox noscope = Checkbox("No Scope");
+	Checkbox nohands = Checkbox("No Hands");
 	Checkbox thirdperson = Checkbox("Thirdperson");
+
+	void DrawModelExecute(const DrawModelState_t &state, const ModelRenderInfo_t &pInfo, matrix3x4 *pCustomBoneToWorld, DrawModelExecuteFn Original);
 
 private:
 
