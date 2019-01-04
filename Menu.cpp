@@ -93,6 +93,7 @@ void Menu::CreateGUI()
 				&gMisc.tauntslide,
 				&gMisc.speedcrouch,
 				&gMisc.nopush,
+				&gMisc.purebypass,
 				&gMisc.cscreenshots,
 			}, GROUP_WIDTH),
 
