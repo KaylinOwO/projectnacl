@@ -68,12 +68,15 @@ void __fastcall Hooked_PaintTraverse( PVOID pPanels, int edx, unsigned int vguiP
 
 			if (gMisc.purebypass.value || gESP.player_enabled.value)
 			{
-				void** pure_addr = nullptr;
-				if (!pure_addr) 
+				if (!gInts.Engine->IsInGame())
 				{
-					pure_addr = *reinterpret_cast<void***>(gSignatures.GetEngineSignature("A1 ? ? ? ? 56 33 F6 85 C0") + 1);
-				} *
-				pure_addr = (void*)0;
+					void** pure_addr = nullptr;
+					if (!pure_addr)
+					{
+						pure_addr = *reinterpret_cast<void***>(gSignatures.GetEngineSignature("A1 ? ? ? ? 56 33 F6 85 C0") + 1);
+					} *
+						pure_addr = (void*)0;
+				}
 			}
 
 			int iWidth, iHeight; //Resolution fix, so this can work in Fullscreen
