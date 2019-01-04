@@ -311,8 +311,10 @@ void CESP::DrawModelExecute(const DrawModelState_t &state, const ModelRenderInfo
 		return;
 
 	CBaseEntity* entity;
+	CBaseEntity* pLocalEntity = GetBaseEntity(me);
 	if (!(entity = GetBaseEntity(pInfo.entity_index)))
 		return;
+
 	ent_id type = entity->Type();
 	if (type != ent_id::CTFPlayer)
 		return;
@@ -337,10 +339,10 @@ void CESP::DrawModelExecute(const DrawModelState_t &state, const ModelRenderInfo
 		return;
 
 	byte team = entity->GetTeamNum();
-	byte localteam = entity->GetTeamNum();
+	byte localteam = pLocalEntity->GetTeamNum();
 
-	//if (team == localteam)
-		//return;
+	if (gESP.enemyonly.value && team == localteam)
+		return;
 
 	SColor color = player_mat.bDef ? colors_team_light[team] : player_mat.color;
 
