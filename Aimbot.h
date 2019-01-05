@@ -9,6 +9,10 @@ public:
 
 	float GetFOV(Vector angle, Vector src, Vector dst);
 
+	Vector EstimateAbsVelocity(CBaseEntity* entity);
+
+	void Projectile(CBaseEntity* local_player, CBaseEntity* entity, CBaseCombatWeapon* local_weapon, Vector& vec_hitbox);
+
 	Checkbox enabled = Checkbox("Enabled");
 	Listbox key = Listbox("Key", { "None", "Mouse 1", "Mouse 2", "Mouse 3", "Mouse 4", "Mouse 5", "Shift", "Alt", "F" }, 0);
 	Slider fov = Slider("FOV Limit", 30, 1, 180, 1);

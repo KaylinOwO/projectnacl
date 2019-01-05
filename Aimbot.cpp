@@ -8,6 +8,165 @@ bool CAimbot::CanAmbassadorHeadshot(CBaseEntity* pLocal)
 
 CAimbot gAim;
 
+Vector CAimbot::EstimateAbsVelocity(CBaseEntity* entity) 
+{
+	typedef void(__thiscall * estimate_abs_velocity_fn)(CBaseEntity*, Vector &);
+	static uintptr_t function = gSignatures.GetClientSignature("E8 ? ? ? ? F3 0F 10 4D ? 8D 85 ? ? ? ? F3 0F 10 45 ? F3 0F 59 C9 56 F3 0F 59 C0 F3 0F 58 C8 0F 2F 0D ? ? ? ? 76 07") + 0x1;
+	static uintptr_t estimate = ((*(PDWORD)(function)) + function + 4);
+
+	estimate_abs_velocity_fn vel = (estimate_abs_velocity_fn)estimate;
+	Vector v; vel(entity, v); return v;
+}
+
+void CAimbot::Projectile(CBaseEntity* local_player, CBaseEntity* entity, CBaseCombatWeapon* local_weapon, Vector& vec_hitbox) 
+{
+	auto item_index = local_weapon->GetItemDefinitionIndex();
+	auto get_speed = [&local_player, &local_weapon, &entity, &item_index]() -> float {
+		auto weapon_speed = 0.0f;
+		switch (item_index) {
+		case WPN_DirectHit:
+			weapon_speed = 1980.0f; break;
+		case WPN_BotRocketlauncherB:
+		case WPN_BotRocketlauncherC:
+		case WPN_BotRocketlauncherD:
+		case WPN_BotRocketlauncherEG:
+		case WPN_BotRocketlauncherES:
+		case WPN_BotRocketlauncherG:
+		case WPN_BotRocketlauncherR:
+		case WPN_BotRocketlauncherS:
+		case WPN_FestiveRocketLauncher:
+		case WPN_NewRocketLauncher:
+		case WPN_RocketLauncher:
+		case WPN_Original:
+		case WPN_Airstrike:
+		case WPN_BlackBox:
+			weapon_speed = 1100.0f; break;
+		case WPN_FestiveFlaregun:
+		case WPN_Flaregun:
+			weapon_speed = 2000.0f; break;
+		case WPN_SyringeGun:
+		case WPN_NewSyringeGun:
+		case WPN_Blutsauger:
+		case WPN_Overdose:
+			weapon_speed = 1000.0f; break;
+		case WPN_RescueRanger:
+		case WPN_Crossbow:
+		case WPN_FestiveCrossbow:
+			weapon_speed = 2400.0f; break;
+		case WPN_GrenadeLauncher:
+		case WPN_NewGrenadeLauncher:
+		case WPN_FestiveGrenadeLauncher:
+			weapon_speed = 1216.6f; break;
+		case WPN_LochNLoad:
+			weapon_speed = 1513.3f; break;
+		case WPN_LoooseCannon:
+			weapon_speed = 1453.9f; break;
+		case WPN_IronBomber:
+			weapon_speed = 1216.6f; break;
+		default: weapon_speed = 0.0f; break;
+		}
+		return weapon_speed;
+	};
+	auto get_gravity = [&local_player, &local_weapon, &entity, &item_index]() -> float {
+		auto weapon_gravity = 0.0f;
+		switch (item_index) {
+		case WPN_RescueRanger:
+		case WPN_Crossbow:
+		case WPN_FestiveCrossbow:
+			weapon_gravity = 0.2f; break;
+		case WPN_GrenadeLauncher:
+		case WPN_NewGrenadeLauncher:
+		case WPN_FestiveGrenadeLauncher:
+		case WPN_LoooseCannon:
+		case WPN_LochNLoad:
+		case WPN_IronBomber:
+			weapon_gravity = 0.4f; break;
+		default: weapon_gravity = 0.0f; break;
+		}
+		return weapon_gravity;
+	};
+	auto is_projectile_weapon = [&local_player, &local_weapon, &entity, &item_index]() -> bool {
+		auto local_class = local_player->GetClassNum(), weapon_slot = local_weapon->GetSlot();
+		if (local_class == TF2_Demoman || local_class == TF2_Soldier || local_class == TF2_Medic) {
+			if (weapon_slot == 0) {
+				return true;
+			}
+		}
+
+		if (local_class == TF2_Engineer) {
+			if (weapon_slot == 0) {
+				if (item_index == WPN_RescueRanger) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	};
+	auto distance_to_ground = [&entity]() -> float {
+		if (entity->GetFlags() & FL_ONGROUND) return 0.0f;
+		auto distance_to_ground = [&entity](Vector origin) -> float
+		{
+			trace_t ground_trace; Ray_t ray;
+			CTraceFilter filter; filter.pSkip = entity;
+			Vector endpos = origin;
+
+			endpos.z -= 8192;
+			ray.Init(origin, endpos);
+			gInts.EngineTrace->TraceRay(ray, MASK_PLAYERSOLID, &filter, &ground_trace);
+			return 8192.0f * ground_trace.fraction;
+		};
+
+		Vector origin = entity->GetAbsOrigin();
+		float v1 = distance_to_ground(origin + Vector(10.0f, 10.0f, 0.0f));
+		float v2 = distance_to_ground(origin + Vector(-10.0f, 10.0f, 0.0f));
+		float v3 = distance_to_ground(origin + Vector(10.0f, -10.0f, 0.0f));
+		float v4 = distance_to_ground(origin + Vector(-10.0f, -10.0f, 0.0f));
+		return min(v1, min(v2, min(v3, v4)));
+	};
+	if (is_projectile_weapon()) {
+		bool on_ground = entity->GetFlags() & FL_ONGROUND;
+		if (local_player->GetClassNum() == TF2_Medic || local_player->GetClassNum() == TF2_Engineer || local_player->GetClassNum() == TF2_Pyro)
+			vec_hitbox = entity->GetHitboxPosition(4);
+		else if (local_player->GetClassNum() == TF2_Soldier || local_player->GetClassNum() == TF2_Demoman) {
+			vec_hitbox = entity->GetAbsOrigin();
+			vec_hitbox[2] += 10.0f;
+		}
+
+		auto hitbox_pred = [&local_player, &entity, &on_ground](Vector hitbox, float speed, float gravity, float distance_to_ground) -> Vector {
+			Vector result = hitbox, bestpos = result;
+
+			auto vec_velocity = gAim.EstimateAbsVelocity(entity);
+			auto medianTime = (local_player->GetEyePosition().DistTo(result) / speed), range = 1.5f,
+				currenttime = medianTime - range;
+
+			if (currenttime <= 0.0f) currenttime = 0.01f;
+
+			auto besttime = currenttime, mindelta = 65536.0f; auto maxsteps = 300;
+			for (int steps = 0; steps < maxsteps; steps++, currenttime += ((float)(2 * range) / (float)maxsteps)) {
+				Vector curpos = result; curpos += vec_velocity * currenttime;
+
+				if (distance_to_ground > 0.0f) {
+					curpos.z -= currenttime * currenttime * 400.0f * ((entity->GetCond() & TFCondEx2_Parachute) ? 0.448f : 1.0f);
+					if (curpos.z < result.z - distance_to_ground) {
+						curpos.z = result.z - distance_to_ground;
+					}
+				}
+
+				auto rockettime = (local_player->GetEyePosition().DistTo(curpos) / speed);
+				if (fabs(rockettime - currenttime) < mindelta) {
+					besttime = currenttime; bestpos = curpos;
+					mindelta = fabs(rockettime - currenttime);
+				}
+			}
+			bestpos.z += (400 * besttime * besttime * gravity);
+			return bestpos;
+		};
+
+		vec_hitbox = hitbox_pred(vec_hitbox, get_speed(), get_gravity(), distance_to_ground());
+	}
+}
+
 void FixMove(CUserCmd* pCmd, Vector m_vOldAngles, float m_fOldForward, float m_fOldSidemove)
 {
 	float deltaView = pCmd->viewangles.y - m_vOldAngles.y;
@@ -212,180 +371,47 @@ void CAimbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 	Vector vLocal = pLocal->GetEyePosition();
 
 	Vector vAngs;
-	
+
 	CBaseCombatWeapon* pWeapon = pLocal->GetActiveWeapon();
-	if (!pWeapon) return;
-	int item_index = pWeapon->GetItemDefinitionIndex();
-	int weapon_slot;
-	weapon_slot = pWeapon->GetSlot();
-	auto get_speed = [&pLocal, &pWeapon, &pEntity, &item_index]() -> float
-	{
-		auto weapon_speed = 0.0f;
-		switch (item_index)
-		{
-		case WPN_DirectHit:
-			weapon_speed = 1980.0f; break;
-		case WPN_BotRocketlauncherB:
-		case WPN_BotRocketlauncherC:
-		case WPN_BotRocketlauncherD:
-		case WPN_BotRocketlauncherEG:
-		case WPN_BotRocketlauncherES:
-		case WPN_BotRocketlauncherG:
-		case WPN_BotRocketlauncherR:
-		case WPN_BotRocketlauncherS:
-		case WPN_FestiveRocketLauncher:
-		case WPN_NewRocketLauncher:
-		case WPN_RocketLauncher:
-		case WPN_Original:
-		case WPN_Airstrike:
-			weapon_speed = 1100.0f; break;
-		case WPN_FestiveFlaregun:
-		case WPN_Flaregun:
-			weapon_speed = 2000.0f; break;
-		case WPN_SyringeGun:
-		case WPN_NewSyringeGun:
-		case WPN_Blutsauger:
-		case WPN_Overdose:
-			weapon_speed = 1000.0f; break;
-		case WPN_RescueRanger:
-		case WPN_Crossbow:
-		case WPN_FestiveCrossbow:
-			weapon_speed = 2400.0f; break;
-		case WPN_GrenadeLauncher:
-		case WPN_NewGrenadeLauncher:
-		case WPN_FestiveGrenadeLauncher:
-			weapon_speed = 1216.6f; break;
-		case WPN_LochNLoad:
-			weapon_speed = 1513.3f; break;
-		case WPN_LoooseCannon:
-			weapon_speed = 1453.9f; break;
-		case WPN_IronBomber:
-			weapon_speed = 1216.6f; break;
-		default: weapon_speed = 0.0f; break;
-		}
-		return weapon_speed;
-	};
-	auto get_gravity = [&pLocal, &pWeapon, &pEntity, &item_index]() -> float
-	{
-		auto weapon_gravity = 0.0f;
-		switch (item_index)
-		{
-		case WPN_RescueRanger:
-		case WPN_Crossbow:
-		case WPN_FestiveCrossbow:
-			weapon_gravity = 0.2f; break;
-		case WPN_GrenadeLauncher:
-		case WPN_NewGrenadeLauncher:
-		case WPN_FestiveGrenadeLauncher:
-		case WPN_LoooseCannon:
-		case WPN_LochNLoad:
-		case WPN_IronBomber:
-			weapon_gravity = 0.4f; break;
-		default: weapon_gravity = 0.0f; break;
-		}
-		return weapon_gravity;
-	};
-	auto is_projectile_weapon = [&pLocal, &pWeapon, &pEntity, &item_index]() -> bool
-	{
-		auto local_class = pLocal->GetClassNum(), weapon_slot = pWeapon->GetSlot();
-		if (local_class == TF2_Soldier ||
-			local_class == TF2_Medic ||
-			local_class == TF2_Demoman ||
-			local_class == TF2_Engineer && item_index == WPN_RescueRanger ||
-			local_class == TF2_Sniper && item_index == WPN_FestiveHuntsman ||
-			local_class == TF2_Sniper && item_index == WPN_Huntsman ||
-			local_class == TF2_Sniper && item_index == WPN_CompoundBow ||
-			local_class == TF2_Pyro && item_index == WPN_Flaregun ||
-			local_class == TF2_Pyro && item_index == WPN_FestiveFlaregun)
-			if (weapon_slot == 0)
-				return true;
-		return false;
-	};
-	auto distance_to_ground = [&pEntity]() -> float
-	{
-		if (pEntity->GetFlags() & FL_ONGROUND)
-			return 0.0f;
-		auto distance_to_ground = [&pEntity](Vector origin) -> float
-		{
-			trace_t ground_trace; Ray_t ray;
-			CTraceFilter filter; filter.pSkip = pEntity;
-			Vector endpos = origin;
-			endpos.z -= 8192;
-			ray.Init(origin, endpos);
-			gInts.EngineTrace->TraceRay(ray, MASK_PLAYERSOLID, &filter, &ground_trace);
-			return 8192.0f * ground_trace.fraction;
-		};
-		Vector origin = pEntity->GetAbsOrigin();
-		float v1 = distance_to_ground(origin + Vector(10.0f, 10.0f, 0.0f));
-		float v2 = distance_to_ground(origin + Vector(-10.0f, 10.0f, 0.0f));
-		float v3 = distance_to_ground(origin + Vector(10.0f, -10.0f, 0.0f));
-		float v4 = distance_to_ground(origin + Vector(-10.0f, -10.0f, 0.0f));
-		return min(v1, min(v2, min(v3, v4)));
-	};
-	if (is_projectile_weapon())
-	{
-		bool isonGround = pEntity->GetFlags() & FL_ONGROUND;
-		if (pLocal->GetClassNum() == TF2_Medic || pLocal->GetClassNum() == TF2_Engineer)
-			vEntity = pEntity->GetHitboxPosition(4);
-		else if (pLocal->GetClassNum() == TF2_Demoman || pLocal->GetClassNum() == TF2_Soldier) {
-			vEntity = pEntity->GetAbsOrigin();
-			vEntity[2] += 10.0f;
-		}
-		auto hitbox_pred = [&pLocal, &pEntity, &isonGround](Vector hitbox, float speed, float gravity, float distance_to_ground) -> Vector
-		{
-			auto best_hitbox = hitbox;
-			auto predicted_time = ((pLocal->GetEyePosition().DistTo(hitbox) / speed) + gInts.globals->interval_per_tick);
-			auto server_gravity = gInts.cvar->FindVar("sv_gravity")->GetFloat();
-			auto vec_velocity = Util->EstimateAbsVelocity(pEntity);
-			vec_velocity[2] += (-server_gravity) * gInts.globals->interval_per_tick * gInts.globals->interval_per_tick + (gravity * gInts.globals->interval_per_tick * gInts.globals->interval_per_tick);
-			best_hitbox[0] += (vec_velocity[0] * predicted_time) + gInts.globals->interval_per_tick;
-			best_hitbox[1] += (vec_velocity[1] * predicted_time) + gInts.globals->interval_per_tick;
-			best_hitbox[2] += (isonGround ? (vec_velocity[2] * predicted_time) + gInts.globals->interval_per_tick :
-				(0.5 * (-server_gravity + gravity)* pow(predicted_time, 2) + vec_velocity[2] * predicted_time)) + gInts.globals->interval_per_tick;
-			if (distance_to_ground > 0.0f)
-				if (best_hitbox[2] < hitbox[2] - distance_to_ground)
-					best_hitbox[2] = hitbox[2] - distance_to_ground;
-			return best_hitbox;
-		};
-		vEntity = hitbox_pred(vEntity, get_speed(), get_gravity(), distance_to_ground());
-	}
-	
+
+	Projectile(pLocal, pEntity, pWeapon, vEntity);
+
 	VectorAngles((vEntity - vLocal), vAngs);
 
 	ClampAngle(vAngs);
 
 	gCvars.iAimbotIndex = pEntity->GetIndex();
 
-		if (smooth.value > 0.0 && !silent.value)
-		{
-			Vector vDelta(pCommand->viewangles - vAngs);
-			AngleNormalize(vDelta);
-			vAngs = pCommand->viewangles - vDelta / smooth.value;
-		}
+	if (smooth.value > 0.0 && !silent.value)
+	{
+		Vector vDelta(pCommand->viewangles - vAngs);
+		AngleNormalize(vDelta);
+		vAngs = pCommand->viewangles - vDelta / smooth.value;
+	}
 
-		if (silent.value)
+	if (silent.value)
+	{
+		if (pCommand->buttons & IN_ATTACK)
 		{
-			if (pCommand->buttons & IN_ATTACK)
-			{
-				w(true, vAngs, pCommand);
-			}
-			else if (Autoshoot.value)
-			{
-				w(true, vAngs, pCommand);
-				pCommand->buttons |= IN_ATTACK;
-			}
-			else
-			{
-				if (pCommand->buttons & IN_ATTACK)
-					w(true, vAngs, pCommand);
-			}
+			w(true, vAngs, pCommand);
+		}
+		else if (Autoshoot.value)
+		{
+			w(true, vAngs, pCommand);
+			pCommand->buttons |= IN_ATTACK;
 		}
 		else
 		{
-			w(silent.value, vAngs, pCommand);
-			if (Autoshoot.value)
-				pCommand->buttons |= IN_ATTACK;
+			if (pCommand->buttons & IN_ATTACK)
+				w(true, vAngs, pCommand);
 		}
+	}
+	else
+	{
+		w(silent.value, vAngs, pCommand);
+		if (Autoshoot.value)
+			pCommand->buttons |= IN_ATTACK;
+	}
 
 
 	FixMove(pCommand, m_vOldViewAngle, m_fOldForwardMove, m_fOldSideMove);
@@ -530,7 +556,7 @@ int CAimbot::GetBestHitbox(CBaseEntity* pLocal, CBaseEntity* pEntity)
 		return -1;
 
 	if (!Util->IsVisible(pLocal, pEntity, pLocal->GetEyePosition(), pEntity->GetHitboxPosition(iBestHitbox)))
-		return - 1;
-	
+		return -1;
+
 	return iBestHitbox;
 }
