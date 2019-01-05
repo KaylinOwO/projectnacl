@@ -111,6 +111,7 @@ void Menu::CreateGUI()
 			new Groupbox("General",
 			{
 				&gHvH.resolver,
+				&gHvH.resolverkey,
 				&gHvH.antiaim,
 				&gHvH.pitch,
 				&gHvH.yaw,
