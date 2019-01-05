@@ -497,6 +497,16 @@ public:
 	}
 };
 
+class ITFMatchGroupDescription //credits blackfire62
+{
+public:
+	char pad0[4];
+	int m_iID;
+	char pad1[63];
+	bool m_bForceCompetitiveSettings;
+};
+
+
 class CGlobals
 {
 public:

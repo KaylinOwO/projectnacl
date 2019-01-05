@@ -19,6 +19,12 @@ CreateInterface_t CvarFactory = NULL;
 CreateInterfaceFn SteamFactory = NULL;
 CreateInterfaceFn MaterialSystemFactory = NULL;
 
+ITFMatchGroupDescription* GetMatchGroupDescription(int& idx) //credits blackfire62
+{
+	typedef ITFMatchGroupDescription* (_cdecl* GetFn)(int&);
+	static GetFn Get = (GetFn)(gSignatures.GetClientSignature("55 8B EC 8B 45 08 8B 00 83 F8 FF"));
+	return Get(idx);
+}
 
 DWORD WINAPI dwMainThread( LPVOID lpArguments )
 {
@@ -96,6 +102,20 @@ DWORD WINAPI dwMainThread( LPVOID lpArguments )
 				panelHook->Rehook();
 			}
 		}
+
+		for (int i = 0; i < 12; i++) //Code by blackfire62 - Competitive Convar Bypass
+		{
+			ITFMatchGroupDescription* desc = GetMatchGroupDescription(i);
+
+			if (!desc || desc->m_iID > 9) //ID's over 9 are invalid
+				continue;
+
+			if (desc->m_bForceCompetitiveSettings)
+			{
+				desc->m_bForceCompetitiveSettings = false;
+			}
+		}
+
 		gInts.globals = *reinterpret_cast<CGlobals **>(gSignatures.GetEngineSignature("A1 ? ? ? ? 8B 11 68") + 8);
 		XASSERT(gInts.globals);
 		DWORD dwClientModeAddress = gSignatures.GetClientSignature("8B 0D ? ? ? ? 8B 02 D9 05");
