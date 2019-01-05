@@ -26,5 +26,5 @@ NaCl is a potassium edit with new features such as
 * channel32 - Being A Generally Nice Guy And Helping Me With Some Shit.
 * Bux - Helped Me With Getting FSN Setup, Helped With A Lot of Other Features.
 * Dumpster-Fire Developers - Auto-Airblast Code
-* cademtz - Sparkly Rewrite UI
+* cademtz - Sparkly Rewrite UI & DME/Chams
 
