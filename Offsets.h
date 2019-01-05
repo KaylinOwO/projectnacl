@@ -18,6 +18,8 @@ public:
 	{
 		if (Pointer)
 			return;
+
+		exit(EXIT_FAILURE);
 	}
 	inline void SafetyCheck(DWORD Pointer)
 	{
