@@ -55,6 +55,7 @@ DWORD WINAPI dwMainThread( LPVOID lpArguments )
 
 		gInts.Client = ( CHLClient* )ClientFactory( "VClient017", NULL);
 		gInts.EntList = ( CEntList* ) ClientFactory( "VClientEntityList003", NULL );
+		gInts.EntList2 = (CEntList2*)ClientFactory("VClientEntityList003", NULL);
 		gInts.Engine = ( EngineClient* ) EngineFactory( "VEngineClient013", NULL );
 		gInts.Surface = ( ISurface* ) VGUIFactory( "VGUI_Surface030", NULL );
 		gInts.RenderView = (CRenderView*)EngineFactory("VEngineRenderView014", NULL);

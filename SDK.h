@@ -632,6 +632,11 @@ public:
 		return *(byte*)(this + gNetVars.get_offset("DT_BasePlayer", "m_lifeState")) == LIFE_ALIVE;
 	}
 
+	bool IsDead() 
+	{
+		return (this->GetLifeState() != LIFE_ALIVE);
+	}
+
 	float GetSimulationTime() 
 	{
 		return *reinterpret_cast<float*>(uintptr_t(this) + 0x6C);
@@ -648,6 +653,12 @@ public:
 		this->GetRenderBounds(vMin, vMax);
 		vWorldSpaceCenter = this->GetAbsOrigin();
 		vWorldSpaceCenter.z += (vMin.z + vMax.z) / 2;
+	}
+	Vector get_world_space_center() 
+	{
+		Vector min, max, out; this->GetRenderBounds(min, max);
+		out = this->GetAbsOrigin(); out[2] += (min[2] + max[2]) / 2;
+		return out;
 	}
 	DWORD* GetModel()
 	{

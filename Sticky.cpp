@@ -5,69 +5,101 @@
 
 CAutoSticky gSticky;
 
+bool IsBombVisible(CBaseEntity* first, CBaseEntity* second) {
+	trace_t trace; Ray_t ray; CTraceFilter filter;
+
+	Vector first_origin = first->GetAbsOrigin(),
+		second_origin = second->GetAbsOrigin();
+	second_origin[2] += 10.0f;
+
+	filter.pSkip = first;
+	ray.Init(first_origin, second_origin);
+	gInts.EngineTrace->TraceRay(ray, MASK_SHOT, &filter, &trace);
+
+	return (trace.m_pEnt == second);
+}
+
+bool HasCond(CBaseEntity* entity, int condition) {
+	if (entity->GetCond() & condition) {
+		return true;
+	}
+	return false;
+}
+
 void CAutoSticky::Run(CBaseEntity* g_pLocalPlayer, CUserCmd* g_pUserCmd)
 {
-	Vector sticky_loc, vent;
-	float dist{ 0.0f };
-	float closest_dist{ 0.0f };
-	// Check if user settings allow Auto Sticky
 	if (!gTrigger.stickydetonate.value)
 		return;
 
-	for (int i = 0; i < gInts.EntList->GetHighestEntityIndex(); i++)
+	auto IsLocalGrenade = [&](CBaseEntity* entity) 
 	{
-		// Find a entity(sticky) from the for loops current tick
-		CBaseEntity *sticky = gInts.EntList->GetClientEntity(i);
+		if (entity->GetClientClass()->iClassID != 216) return false;
+		if (entity->GetPipeType() != 1) return false;
 
-		if (sticky == NULL)
-			continue;
-		// Check if null or dormant
-		if (!sticky)
-			continue;
+		auto get_thrower = entity->GetThrower();
+		if (!get_thrower) return false;
 
-		if (sticky->GetTeamNum() != g_pLocalPlayer->GetTeamNum())//only my teams sticky
-			continue;
-		if (!strcmp(sticky->GetClientClass()->chName, "CTFGrenadePipebombProjectile")) {
-			if (!sticky->GetOwner())//and finally if its not my sticky, I dont think this works but I dont care enough to fix
-				continue;
-			sticky->GetWorldSpaceCenter(sticky_loc);
-			for (int j = 1; j < gInts.Engine->GetMaxClients(); j++) {
-				if (j == me)
-					continue;
-				CBaseEntity *pEntity = GetBaseEntity(j);
-				if (pEntity == NULL)
-					continue;
-				if (!pEntity)
-					continue;
-				if (pEntity == g_pLocalPlayer)
-					continue;
-				if (pEntity->IsDormant())
-					continue;
-				if (pEntity->GetLifeState() != LIFE_ALIVE)
-					continue;
-				if (!gCvars.PlayerMode[i])
-					continue;
-				if (pEntity->GetTeamNum() == g_pLocalPlayer->GetTeamNum())
-					continue;
-				if (pEntity->GetCond() & TFCond_Ubercharged ||
-					pEntity->GetCond() & TFCond_UberchargeFading ||
-					pEntity->GetCond() & TFCond_Bonked)
-					continue;
+		auto entity_handle = (CBaseEntity*)gInts.EntList2->GetClientEntityFromHandle(get_thrower);
+		if (!entity_handle) return false;
 
-				vent = pEntity->GetHitboxPosition(4);
-				//dist = (sticky->GetAbsOrigin() - pEntity->GetAbsOrigin()).Length();
-				dist = Util->flGetDistance(sticky_loc, vent);
-				if (dist < closest_dist || closest_dist == 0.0f)
-				{
-					closest_dist = dist;
+		if (entity_handle != g_pLocalPlayer) return false;
+		return true;
+	};
+
+	for (int i = 0; i < gInts.EntList2->GetHighestEntityIndex(); i++) 
+	{
+		CBaseEntity* first_entity = reinterpret_cast<CBaseEntity*>(gInts.EntList2->GetClientEntity(i));
+		if (!first_entity) {
+			continue;
+		}
+
+		Vector sticky_position = first_entity->get_world_space_center();
+		if (IsLocalGrenade(first_entity)) {
+			for (int player = 0; player < gInts.Engine->GetMaxClients(); player++) {
+				if (i == g_pLocalPlayer->GetIndex()) { continue; }
+				CBaseEntity* second_entity = reinterpret_cast<CBaseEntity*>(gInts.EntList2->GetClientEntity(player));
+				if (!second_entity || second_entity->IsDormant() || second_entity->IsDead()) {
+					continue;
+				}
+				if (second_entity->GetTeamNum() == g_pLocalPlayer->GetTeamNum()) {
+					continue;
+				}
+
+				if (HasCond(second_entity, 32) || HasCond(second_entity, 16384) ||
+					HasCond(second_entity, 16) || HasCond(second_entity, 8192)) {
+					continue;
+				}
+
+				auto get_distance = [&](Vector to, Vector from) -> float {
+					Vector delta = to - from;
+					float distance = ::sqrt(delta.length());
+
+					if (distance < 1.0f) {
+						distance = 1.0f;
+					}
+
+					return distance;
+				};
+
+				auto is_bomb_visible = [&](CBaseEntity* first, CBaseEntity* second) {
+					trace_t tr; Ray_t ray; CTraceFilter filter;
+
+					auto first_origin = first->GetAbsOrigin(),
+						second_origin = second->GetAbsOrigin();
+
+					filter.pSkip = first;
+					ray.Init(first_origin, second_origin);
+					gInts.EngineTrace->TraceRay(ray, MASK_SHOT, &filter, &tr);
+
+					return (tr.m_pEnt == second);
+				};
+
+				if (get_distance(sticky_position, second_entity->GetAbsOrigin()) < 12.0f) {
+					if (is_bomb_visible(first_entity, second_entity)) {
+						g_pUserCmd->buttons |= IN_ATTACK2;
+					}
 				}
 			}
 		}
 	}
-	if (closest_dist == 0.0f || closest_dist > 12.0f)
-		return;
-	// det
-	g_pUserCmd->buttons |= IN_ATTACK2;
-	// Function is finished, return*/
-	return;
 }
