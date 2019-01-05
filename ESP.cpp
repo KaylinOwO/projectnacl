@@ -307,58 +307,94 @@ static SColor colors_team_light[] =
 #include "CMat.h"
 void CESP::DrawModelExecute(const DrawModelState_t &state, const ModelRenderInfo_t &pInfo, matrix3x4 *pCustomBoneToWorld, DrawModelExecuteFn Original)
 {
-	if (!player_enabled.value)
-		return;
-
+	const char* pszModelName = gInts.ModelInfo->GetModelName((DWORD*)pInfo.pModel);
 	CBaseEntity* entity;
 	CBaseEntity* pLocalEntity = GetBaseEntity(me);
-	if (!(entity = GetBaseEntity(pInfo.entity_index)))
-		return;
 
-	ent_id type = entity->Type();
-	if (type != ent_id::CTFPlayer)
-		return;
-
-	// Normal visibility will just run once
-	// And "Always" visibility will run twice with the same mat
-	bool bReset = player_enabled.value > 2;
-
-	// Stubbed for now. More materials later.
-	Matptr desired;
-
-	if (gESP.chamsmat.value == 0)
-		desired = gMat.glow;
-	else if (gESP.chamsmat.value == 1)
-		desired = gMat.shaded;
-	else if (gESP.chamsmat.value == 2)
-		desired = gMat.shiny;
-	else if (gESP.chamsmat.value == 3)
-		desired = gMat.wireframe;
-	
-	if (!desired)
-		return;
-
-	byte team = entity->GetTeamNum();
-	byte localteam = pLocalEntity->GetTeamNum();
-
-	if (gESP.enemyonly.value && team == localteam)
-		return;
-
-	SColor color = player_mat.bDef ? colors_team_light[team] : player_mat.color;
-
-	desired->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, player_enabled.value != 1);
-	gMat.ForceMaterial(color, desired);
-
-	// "Behind walls" / "always" requires a second render with ignorez before the original
-	if (player_enabled.value != 1)
+	if (hands_enabled.value == 2 && strstr(pszModelName, "arms"))
 	{
-		Original(gInts.ModelRender, state, pInfo, pCustomBoneToWorld);
-		if (player_enabled.value == 2) // Now we will render a normal visibility model with "always" enabled
-			desired->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, false);
+		Matptr desiredhands;
+
+		if (gESP.hands_chams.value == 0)
+			desiredhands = gMat.glow;
+		else if (gESP.hands_chams.value == 1)
+			desiredhands = gMat.shaded;
+		else if (gESP.hands_chams.value == 2)
+			desiredhands = gMat.shiny;
+		else if (gESP.hands_chams.value == 3)
+			desiredhands = gMat.wireframe;
+
+		byte localteam = pLocalEntity->GetTeamNum();
+
+		CBaseEntity* pLocal = (CBaseEntity*)gInts.EntList->GetClientEntity(gInts.Engine->GetLocalPlayer());
+		SColor color = hand_mat_color.bDef ? colors_team_light[localteam] : hand_mat_color.color;
+
+		if (pLocal->IsAlive() && pLocal->GetHealth() > 0 && !pLocal->IsDormant()) 
+		{
+			Color RGBA = gDrawManager.GetPlayerColor(pLocal);
+
+			desiredhands->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, false);
+			desiredhands->ColorModulate(RGBA[0], RGBA[1], RGBA[2]);
+			desiredhands->AddRef();
+
+			gMat.ForceMaterial(color, desiredhands);
+		}
+		else
+		{
+			gInts.ModelRender->ForcedMaterialOverride(NULL, OverrideType_t::OVERRIDE_NORMAL);
+		}
 	}
 
-	if (bReset)
-		gMat.ResetMaterial();
+	if (player_enabled.value)
+	{
+		if (!(entity = GetBaseEntity(pInfo.entity_index)))
+			return;
+
+		ent_id type = entity->Type();
+		if (type != ent_id::CTFPlayer)
+			return;
+
+		// Normal visibility will just run once
+		// And "Always" visibility will run twice with the same mat
+		bool bReset = player_enabled.value > 2;
+
+		// Stubbed for now. More materials later.
+		Matptr desired;
+
+		if (gESP.chamsmat.value == 0)
+			desired = gMat.glow;
+		else if (gESP.chamsmat.value == 1)
+			desired = gMat.shaded;
+		else if (gESP.chamsmat.value == 2)
+			desired = gMat.shiny;
+		else if (gESP.chamsmat.value == 3)
+			desired = gMat.wireframe;
+
+		if (!desired)
+			return;
+
+		byte team = entity->GetTeamNum();
+		byte localteam = pLocalEntity->GetTeamNum();
+
+		if (gESP.enemyonly.value && team == localteam)
+			return;
+
+		SColor color = player_mat.bDef ? colors_team_light[team] : player_mat.color;
+
+		desired->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, player_enabled.value != 1);
+		gMat.ForceMaterial(color, desired);
+
+		// "Behind walls" / "always" requires a second render with ignorez before the original
+		if (player_enabled.value != 1)
+		{
+			Original(gInts.ModelRender, state, pInfo, pCustomBoneToWorld);
+			if (player_enabled.value == 2) // Now we will render a normal visibility model with "always" enabled
+				desired->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, false);
+		}
+
+		if (bReset)
+			gMat.ResetMaterial();
+	}
 }
 
 

@@ -77,8 +77,10 @@ void Menu::CreateGUI()
 		new Groupbox("Misc",{
 				&gESP.nozoom,
 				&gESP.noscope,
-				&gESP.nohands,
 				&gESP.thirdperson,
+				&gESP.hands_enabled,
+				&gESP.hands_chams,
+				&gESP.hand_mat_color,
 			}, GROUP_WIDTH)
 		})
 		);

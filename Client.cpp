@@ -10,6 +10,7 @@
 #include "AutoAirblast.h"
 #include "Sticky.h"
 #include "CMat.h"
+#include "CDrawManager.h"
 #include <intrin.h>
 
 Vector qLASTTICK;
@@ -274,7 +275,7 @@ void __stdcall Hooked_DrawModelExecute(const DrawModelState_t &state, const Mode
 		if (pInfo.pModel)
 			gESP.DrawModelExecute(state, pInfo, pCustomBoneToWorld, CallOriginal);
 
-		if (gESP.nohands.value && strstr(pszModelName, "arms"))
+		if (gESP.hands_enabled.value == 1 && strstr(pszModelName, "arms"))
 			return;
 	}
 	catch (...)
