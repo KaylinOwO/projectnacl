@@ -7,6 +7,7 @@ class CESP
 public:
 
 	void Run(CBaseEntity* pLocal);
+	void FrameStageNotify(ClientFrameStage_t Stage);
 
 	Checkbox enabled = Checkbox("Enabled");
 	Checkbox enemyonly = Checkbox("Enemy Only");
@@ -30,6 +31,10 @@ public:
 	Listbox hands_enabled = Listbox("Hands", { "Disabled", "None", "Chams" });
 	Listbox hands_chams = Listbox("Hand Chams Material", { "Flat", "Shaded", "Shiny", "Wireframe" }, 0);
 	ColorPicker hand_mat_color = ColorPicker("Hand Chams Color", SColor(200));
+
+	Checkbox world_enabled = Checkbox("Enabled");
+	ColorPicker world_clr = ColorPicker("World Color", SColor(200));
+	ColorPicker sky_clr = ColorPicker("Sky Color", SColor(200));
 
 
 	void DrawModelExecute(const DrawModelState_t &state, const ModelRenderInfo_t &pInfo, matrix3x4 *pCustomBoneToWorld, DrawModelExecuteFn Original);

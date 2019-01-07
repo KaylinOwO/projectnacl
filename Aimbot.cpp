@@ -8,7 +8,7 @@ bool CAimbot::CanAmbassadorHeadshot(CBaseEntity* pLocal)
 
 CAimbot gAim;
 
-Vector CAimbot::EstimateAbsVelocity(CBaseEntity* entity) 
+Vector CAimbot::EstimateAbsVelocity(CBaseEntity* entity)
 {
 	typedef void(__thiscall * estimate_abs_velocity_fn)(CBaseEntity*, Vector &);
 	static uintptr_t function = gSignatures.GetClientSignature("E8 ? ? ? ? F3 0F 10 4D ? 8D 85 ? ? ? ? F3 0F 10 45 ? F3 0F 59 C9 56 F3 0F 59 C0 F3 0F 58 C8 0F 2F 0D ? ? ? ? 76 07") + 0x1;
@@ -18,7 +18,7 @@ Vector CAimbot::EstimateAbsVelocity(CBaseEntity* entity)
 	Vector v; vel(entity, v); return v;
 }
 
-void CAimbot::Projectile(CBaseEntity* local_player, CBaseEntity* entity, CBaseCombatWeapon* local_weapon, Vector& vec_hitbox) 
+void CAimbot::Projectile(CBaseEntity* local_player, CBaseEntity* entity, CBaseCombatWeapon* local_weapon, Vector& vec_hitbox)
 {
 	auto item_index = local_weapon->GetItemDefinitionIndex();
 	auto get_speed = [&local_player, &local_weapon, &entity, &item_index]() -> float {
@@ -281,19 +281,19 @@ void CAimbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 #pragma endregion
 #pragma region pyro
 		|| id == (int)pyroweapons::WPN_Detonator
-		|| id == (int)pyroweapons::WPN_FestiveFlaregun
-		|| id == (int)pyroweapons::WPN_Flaregun
+		//	|| id == (int)pyroweapons::WPN_FestiveFlaregun
+		//	|| id == (int)pyroweapons::WPN_Flaregun
 		|| id == (int)pyroweapons::WPN_ScorchShot
 #pragma endregion
 #pragma region demo
 		//|| id == (int)demomanweapons::WPN_FestiveGrenadeLauncher
-		|| id == (int)demomanweapons::WPN_FestiveStickyLauncher
+		//|| id == (int)demomanweapons::WPN_FestiveStickyLauncher
 		//|| id == (int)demomanweapons::WPN_GrenadeLauncher
 		//|| id == (int)demomanweapons::WPN_IronBomber
 		//|| id == (int)demomanweapons::WPN_LochNLoad
-		|| id == (int)demomanweapons::WPN_LoooseCannon
-		|| id == (int)demomanweapons::WPN_QuickieBombLauncher
-		|| id == (int)demomanweapons::WPN_StickyLauncher
+		//|| id == (int)demomanweapons::WPN_LoooseCannon
+		//|| id == (int)demomanweapons::WPN_QuickieBombLauncher
+		//|| id == (int)demomanweapons::WPN_StickyLauncher
 		|| id == (int)demomanweapons::WPN_ScottsSkullctter
 #pragma endregion
 #pragma region heavy
@@ -310,20 +310,20 @@ void CAimbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 		|| id == (int)engineerweapons::WPN_Destructor
 		|| id == (int)engineerweapons::WPN_FestiveWrangler
 		|| id == (int)engineerweapons::WPN_Pomson
-		|| id == (int)engineerweapons::WPN_RescueRanger
+		//|| id == (int)engineerweapons::WPN_RescueRanger
 		|| id == (int)engineerweapons::WPN_ShortCircut
 		|| id == (int)engineerweapons::WPN_Toolbox
 		|| id == (int)engineerweapons::WPN_Wrangler
 #pragma endregion
 #pragma region medic
-		|| id == (int)medicweapons::WPN_Blutsauger
+		//	|| id == (int)medicweapons::WPN_Blutsauger
 		|| id == (int)medicweapons::WPN_FestiveCrossbow
 		|| id == (int)medicweapons::WPN_FestiveMedigun
 		|| id == (int)medicweapons::WPN_Kritzkrieg
 		|| id == (int)medicweapons::WPN_Medigun
-		|| id == (int)medicweapons::WPN_Overdose
+		//	|| id == (int)medicweapons::WPN_Overdose
 		|| id == (int)medicweapons::WPN_QuickFix
-		|| id == (int)medicweapons::WPN_SyringeGun
+		//|| id == (int)medicweapons::WPN_SyringeGun
 		|| id == (int)medicweapons::WPN_Vaccinator
 
 #pragma endregion

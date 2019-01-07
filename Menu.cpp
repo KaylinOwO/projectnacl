@@ -81,6 +81,12 @@ void Menu::CreateGUI()
 				&gESP.hands_enabled,
 				&gESP.hands_chams,
 				&gESP.hand_mat_color,
+			}, GROUP_WIDTH),
+
+			new Groupbox("World Modulation",{
+				&gESP.world_enabled,
+				&gESP.world_clr,
+				&gESP.sky_clr,
 			}, GROUP_WIDTH)
 		})
 		);

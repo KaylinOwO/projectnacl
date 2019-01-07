@@ -70,6 +70,8 @@ bool __fastcall Hooked_CreateMove(PVOID ClientMode, int edx, float input_sample_
 
 void __fastcall FrameStageNotifyThink(PVOID CHLClient, void *_this, ClientFrameStage_t Stage)
 {
+	gESP.FrameStageNotify(Stage);
+
 	if (Stage == FRAME_NET_UPDATE_POSTDATAUPDATE_START)
 	{
 		for (auto i = 1; i <= gInts.Engine->GetMaxClients(); i++)
