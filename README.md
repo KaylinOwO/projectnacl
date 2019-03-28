@@ -15,7 +15,7 @@ NaCl is a potassium edit with new features such as
 
 * New FOV Based Aimbot
 * New (More) Accurate Triggerbot
-* Brand New Misc Options
+* Player Chams
 
 ## Credits
 * outizm - Aimbot Improvements
