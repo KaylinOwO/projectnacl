@@ -68,7 +68,7 @@ Color GetHealthColor(CBaseEntity* pPlayer)
 			return Color(255, 20, 20, 255);
 	return Color(255, 20, 20, 255);
 }
-#include "Radar.h"
+
 void CESP::Player_ESP(CBaseEntity* pLocal, CBaseEntity* pEntity)
 {
 	Color HealthColor = GetHealthColor(pEntity);
@@ -290,12 +290,7 @@ void CESP::Player_ESP(CBaseEntity* pLocal, CBaseEntity* pEntity)
 	}
 
 	Vector b = pLocal->GetAbsAngles();
-
-	//if (radar.value) Im too lazy to add the radar shit into the new menu (which would take 5 seconds and would probably be even faster than writing this but I don't think anyone actually liked it anyways)
-		//gRadar.DrawRadarPoint(pEntity->GetAbsOrigin(), pLocal->GetAbsOrigin(), QAngle(b.x, b.y, b.z), pEntity, clrTeam);
 }
-
-// These hardcoded color arrays will be improved later
 
 static SColor colors_team[] =
 {

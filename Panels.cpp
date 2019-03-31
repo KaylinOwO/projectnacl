@@ -9,7 +9,6 @@
 #include "Misc.h"
 #include "CMat.h"
 
-#include "Radar.h"
 CScreenSize gScreenSize;
 //===================================================================================
 void __fastcall Hooked_PaintTraverse( PVOID pPanels, int edx, unsigned int vguiPanel, bool forceRepaint, bool allowForce)
@@ -90,7 +89,6 @@ void __fastcall Hooked_PaintTraverse( PVOID pPanels, int edx, unsigned int vguiP
 			if (!pLocal)
 				return;
 
-			gRadar.DrawRadarBack();
 			gESP.Run(pLocal);
 
 

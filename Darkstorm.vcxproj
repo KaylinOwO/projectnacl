@@ -112,8 +112,6 @@
     <ClCompile Include="Offsets.cpp" />
     <ClCompile Include="Panels.cpp" />
     <ClCompile Include="CSignature.cpp" />
-    <ClCompile Include="QAngle.cpp" />
-    <ClCompile Include="Radar.cpp" />
     <ClCompile Include="Sticky.cpp" />
     <ClCompile Include="Styles.cpp" />
     <ClCompile Include="Triggerbot.cpp" />
@@ -149,8 +147,6 @@
     <ClInclude Include="Misc.h" />
     <ClInclude Include="Offsets.h" />
     <ClInclude Include="Panels.h" />
-    <ClInclude Include="QAngle.h" />
-    <ClInclude Include="Radar.h" />
     <ClInclude Include="SDK.h" />
     <ClInclude Include="CSignature.h" />
     <ClInclude Include="Sticky.h" />

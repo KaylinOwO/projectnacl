@@ -52,12 +52,6 @@
     <ClCompile Include="cvwrapper.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="Radar.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="QAngle.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="HvH.cpp">
       <Filter>Modules\HvH</Filter>
     </ClCompile>
@@ -159,12 +153,6 @@
     <ClInclude Include="cvwrapper.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="Radar.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="QAngle.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="HvH.h">
       <Filter>Modules\HvH</Filter>
     </ClInclude>
@@ -201,9 +189,6 @@
     <ClInclude Include="Sticky.h">
       <Filter>Modules\Auto-Sticky Detonate</Filter>
     </ClInclude>
-    <ClInclude Include="Triggerbot.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Materials.h">
       <Filter>Headers</Filter>
     </ClInclude>
@@ -218,6 +203,9 @@
     </ClInclude>
     <ClInclude Include="Backtrack.h">
       <Filter>Modules\Backtrack</Filter>
+    </ClInclude>
+    <ClInclude Include="Triggerbot.h">
+      <Filter>Modules\Triggerbot</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
