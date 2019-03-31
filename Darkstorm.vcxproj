@@ -91,13 +91,13 @@
   <ItemGroup>
     <ClCompile Include="Aimbot.cpp" />
     <ClCompile Include="AutoAirblast.cpp" />
+    <ClCompile Include="Backtrack.cpp" />
     <ClCompile Include="CBaseEntity.cpp" />
     <ClCompile Include="CDraw.cpp" />
     <ClCompile Include="CDrawManager.cpp" />
     <ClCompile Include="CEtags.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="CMat.cpp" />
-    <ClCompile Include="CMenu.cpp" />
     <ClCompile Include="CNetVars.cpp" />
     <ClCompile Include="Controls.cpp" />
     <ClCompile Include="ConVar.cpp" />
@@ -114,7 +114,6 @@
     <ClCompile Include="CSignature.cpp" />
     <ClCompile Include="QAngle.cpp" />
     <ClCompile Include="Radar.cpp" />
-    <ClCompile Include="RemoveCondExploit.cpp" />
     <ClCompile Include="Sticky.cpp" />
     <ClCompile Include="Styles.cpp" />
     <ClCompile Include="Triggerbot.cpp" />
@@ -124,6 +123,7 @@
   <ItemGroup>
     <ClInclude Include="Aimbot.h" />
     <ClInclude Include="AutoAirblast.h" />
+    <ClInclude Include="Backtrack.h" />
     <ClInclude Include="bspflags.h" />
     <ClInclude Include="CDraw.h" />
     <ClInclude Include="CDrawManager.h" />
@@ -131,7 +131,6 @@
     <ClInclude Include="CGlobalVars.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="CMat.h" />
-    <ClInclude Include="CMenu.h" />
     <ClInclude Include="CNetVars.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Controls.h" />
@@ -152,7 +151,6 @@
     <ClInclude Include="Panels.h" />
     <ClInclude Include="QAngle.h" />
     <ClInclude Include="Radar.h" />
-    <ClInclude Include="RemoveCondExploit.h" />
     <ClInclude Include="SDK.h" />
     <ClInclude Include="CSignature.h" />
     <ClInclude Include="Sticky.h" />

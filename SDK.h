@@ -22,7 +22,7 @@
 #include "Color.h"
 #include "CNetVars.h"
 #include "bspflags.h"
-#include "CMenu.h"
+
 #include "studio.h"
 #include "ConVar.h"
 #include "Vector2.h"

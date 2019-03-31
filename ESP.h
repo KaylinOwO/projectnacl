@@ -28,6 +28,7 @@ public:
 	Checkbox noscope = Checkbox("No Scope");
 	Checkbox nohands = Checkbox("No Hands");
 	Checkbox thirdperson = Checkbox("Thirdperson");
+	Checkbox visualize_backtrack = Checkbox("Visualize Backtrack");
 	Listbox hands_enabled = Listbox("Hands", { "Disabled", "None", "Chams" });
 	Listbox hands_chams = Listbox("Hand Chams Material", { "Flat", "Shaded", "Shiny", "Wireframe" }, 0);
 	ColorPicker hand_mat_color = ColorPicker("Hand Chams Color", SColor(200));

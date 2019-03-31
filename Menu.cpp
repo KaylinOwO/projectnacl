@@ -78,6 +78,7 @@ void Menu::CreateGUI()
 				&gESP.nozoom,
 				&gESP.noscope,
 				&gESP.thirdperson,
+				&gESP.visualize_backtrack,
 				&gESP.hands_enabled,
 				&gESP.hands_chams,
 				&gESP.hand_mat_color,
@@ -103,6 +104,12 @@ void Menu::CreateGUI()
 				&gMisc.nopush,
 				&gMisc.purebypass,
 				&gMisc.cscreenshots,
+			}, GROUP_WIDTH),
+
+			new Groupbox("Backtrack",
+			{
+				&gMisc.backtrack,
+				&gMisc.backtrack_ticks,
 			}, GROUP_WIDTH),
 
 			new Groupbox("Fakelag",

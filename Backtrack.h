@@ -6,7 +6,7 @@ struct backtracking_record {
 	Vector head_position;
 };
 
-struct position_adjustment_data {
+struct backtrack_data {
 	int tick_count;
 	std::vector<backtracking_record> records;
 };
@@ -22,14 +22,9 @@ struct tick_record {
 	matrix3x4 bone_matrix[128];
 };
 
-namespace global {
-	extern CBaseEntity*	local_player;
-	extern CUserCmd*		command;
-}
-
-namespace position_adjustment {
+namespace backtrack {
 	extern std::vector<tick_record> ticks[64];
-	extern void position_adjustment_start();
-	extern void position_adjustment_calc();
-	extern void do_position_adjustment();
+	extern void backtrack_start();
+	extern void backtrack_calc();
+	extern void do_backtrack();
 };

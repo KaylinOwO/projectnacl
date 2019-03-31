@@ -22,6 +22,9 @@ public:
 	Checkbox cscreenshots = Checkbox("Clean Screenshots");
 	Checkbox purebypass = Checkbox("Pure Bypass");
 
+	Checkbox backtrack = Checkbox("Backtrack");
+	Slider backtrack_ticks = Slider("Backtrack Ticks", 0, 0, 12, 1);
+
 	Checkbox flag = Checkbox("Fakelag");
 	Slider flagamount = Slider("Fakelag Amount", 0, 0, 15, 1);
 

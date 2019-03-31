@@ -20,6 +20,27 @@ void CUtil::VectorTransform(const Vector& vSome, const matrix3x4& vMatrix, Vecto
 		vOut[i] = vSome.Dot((Vector&)vMatrix[i]) + vMatrix[i][3];
 }
 
+Vector CUtil::AngleVector(Vector meme) {
+	auto sy = sin(meme.y / 180.f * static_cast<float>(PI));
+	auto cy = cos(meme.y / 180.f * static_cast<float>(PI));
+	auto sp = sin(meme.x / 180.f * static_cast<float>(PI));
+	auto cp = cos(meme.x / 180.f* static_cast<float>(PI));
+	return Vector(cp * cy, cp * sy, -sp);
+}
+
+float CUtil::DistPointToLine(Vector point, Vector origin, Vector direction) {
+	auto point_direction = point - origin;
+
+	auto temporary_offset = point_direction.dot(direction) / (direction.x * direction.x + direction.y * direction.y + direction.z * direction.z);
+	if (temporary_offset < 0.000001f) {
+		return FLT_MAX;
+	}
+
+	auto perpendicular_point = origin + (direction * temporary_offset);
+
+	return (point - perpendicular_point).length();
+}
+
 bool CUtil::IsVisible(void* pLocal, void* pEntity, Vector vStart, Vector vEnd)
 {
 	trace_t Trace;

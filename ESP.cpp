@@ -3,6 +3,7 @@
 #include "Util.h"
 
 #include "Aimbot.h"
+#include "Backtrack.h"
 
 #include "CEtags.h"
 
@@ -15,9 +16,6 @@ void CESP::Run(CBaseEntity* pLocal)
 		return;
 	for (int i = 1; i <= gInts.Engine->GetMaxClients(); i++)
 	{
-	//	if (i == me)
-	//		return Color(255, 165, 0, 255);
-
 		if (!thirdperson.value && i == me)
 			continue;
 
@@ -57,7 +55,7 @@ Color gaylol(CBaseEntity* pPlayer)
 		return Color(255, 165, 0, 255);
 	}
 
-	return Color(0, 0, 0, 0); //no reason for this to be here, i just wanna look smart
+	return Color(0, 0, 0, 0);
 }
 
 Color GetHealthColor(CBaseEntity* pPlayer)
@@ -68,7 +66,7 @@ Color GetHealthColor(CBaseEntity* pPlayer)
 			return Color(55, 255, 0, 255);
 		if (pPlayer->GetHealth() > 35)
 			return Color(255, 20, 20, 255);
-	return Color(255, 20, 20, 255); //no reason for this to be here, i just wanna look smart
+	return Color(255, 20, 20, 255);
 }
 #include "Radar.h"
 void CESP::Player_ESP(CBaseEntity* pLocal, CBaseEntity* pEntity)
@@ -229,7 +227,21 @@ void CESP::Player_ESP(CBaseEntity* pLocal, CBaseEntity* pEntity)
 		}
 	}
 
+	if (visualize_backtrack.value) {
+		if (backtrack::ticks[pEntity->GetIndex()].empty()) {
+			return;
+		}
 
+		for (unsigned int t = 0; t < backtrack::ticks[pEntity->GetIndex()].size(); t++) {
+			Vector hitbox = backtrack::ticks[pEntity->GetIndex()].at(t).head_position, screen;
+			if (gDrawManager.WorldToScreen(hitbox, screen)) {
+				gDrawManager.DrawLine(screen[0] - 8, screen[1] - 0, screen[0] + 8, screen[1] + 0, Color(255, 0, 0, 200));
+				gDrawManager.DrawLine(screen[0] + 0, screen[1] - 8, screen[0] - 0, screen[1] + 8, Color(255, 0, 0, 200));
+				gDrawManager.DrawLine(screen[0] - 4, screen[1] - 0, screen[0] + 4, screen[1] + 0, Color(255, 255, 255, 255));
+				gDrawManager.DrawLine(screen[0] + 0, screen[1] - 4, screen[0] - 0, screen[1] + 4, Color(255, 255, 255, 255));
+			}
+		}
+	}
 
 	if (status.value)
 	{

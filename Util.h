@@ -15,6 +15,10 @@ public:
 
 	void VectorTransform(const Vector& vSome, const matrix3x4& vMatrix, Vector& vOut);
 
+	Vector AngleVector(Vector meme);
+
+	float DistPointToLine(Vector point, Vector origin, Vector direction);
+
 	float flGetDistance(Vector vOrigin, Vector vLocalOrigin);
 
 	bool IsVisible(void* pLocal, void* pEntity, Vector vStart, Vector vEnd);

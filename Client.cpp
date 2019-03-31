@@ -3,15 +3,17 @@
 #include "Util.h"
 #include "Aimbot.h"
 #include "Triggerbot.h"
-#include "Misc.h"
-#include "RemoveCondExploit.h"
 #include "HvH.h"
 #include "ESP.h"
+#include "Misc.h"
+#include "Backtrack.h"
 #include "AutoAirblast.h"
 #include "Sticky.h"
 #include "CMat.h"
 #include "CDrawManager.h"
 #include <intrin.h>
+
+CGlobalzz g;
 
 Vector qLASTTICK;
 
@@ -38,6 +40,9 @@ bool __fastcall Hooked_CreateMove(PVOID ClientMode, int edx, float input_sample_
 		if (!pLocal)
 			return bReturn;
 
+		g.local = reinterpret_cast<CBaseEntity*>(gInts.EntList->GetClientEntity(gInts.Engine->GetLocalPlayer()));
+		g.cmd = pCommand; g.original_cmd = *pCommand;
+
 		auto base = reinterpret_cast<uintptr_t>(_AddressOfReturnAddress()) - sizeof(uintptr_t);
 		bool& bSendPacket = *(***reinterpret_cast<bool****>(base) - 1);
 
@@ -59,6 +64,7 @@ bool __fastcall Hooked_CreateMove(PVOID ClientMode, int edx, float input_sample_
 		gTrigger.Run(pLocal, pCommand);
 		gBlast.Run(pLocal, pCommand);
 		gSticky.Run(pLocal, pCommand);
+		backtrack::do_backtrack();
 	}
 	catch (...)
 	{

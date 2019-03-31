@@ -31,9 +31,6 @@
     <ClCompile Include="Util.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="CMenu.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Aimbot.cpp">
       <Filter>Modules\Aimbot</Filter>
     </ClCompile>
@@ -64,9 +61,6 @@
     <ClCompile Include="HvH.cpp">
       <Filter>Modules\HvH</Filter>
     </ClCompile>
-    <ClCompile Include="RemoveCondExploit.cpp">
-      <Filter>Modules\Time Shift</Filter>
-    </ClCompile>
     <ClCompile Include="AutoAirblast.cpp">
       <Filter>Modules\Auto-Airblast</Filter>
     </ClCompile>
@@ -93,6 +87,9 @@
     </ClCompile>
     <ClCompile Include="Offsets.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Backtrack.cpp">
+      <Filter>Modules\Backtrack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -141,9 +138,6 @@
     <ClInclude Include="Util.h">
       <Filter>Headers</Filter>
     </ClInclude>
-    <ClInclude Include="CMenu.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Aimbot.h">
       <Filter>Modules\Aimbot</Filter>
     </ClInclude>
@@ -173,9 +167,6 @@
     </ClInclude>
     <ClInclude Include="HvH.h">
       <Filter>Modules\HvH</Filter>
-    </ClInclude>
-    <ClInclude Include="RemoveCondExploit.h">
-      <Filter>Modules\Time Shift</Filter>
     </ClInclude>
     <ClInclude Include="AutoAirblast.h">
       <Filter>Modules\Auto-Airblast</Filter>
@@ -225,6 +216,9 @@
     <ClInclude Include="Offsets.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Backtrack.h">
+      <Filter>Modules\Backtrack</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Headers">
@@ -269,14 +263,14 @@
     <Filter Include="Modules\HvH">
       <UniqueIdentifier>{0112088d-3049-4d72-92c0-479950f066ae}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Modules\Time Shift">
-      <UniqueIdentifier>{9b4d42ba-f6e7-4f94-b020-6ca7aa004981}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Modules\Auto-Airblast">
       <UniqueIdentifier>{36eafdf6-43d2-4489-8f42-7d951f9d8f05}</UniqueIdentifier>
     </Filter>
     <Filter Include="Modules\Auto-Sticky Detonate">
       <UniqueIdentifier>{a158b6f9-fb59-4dd7-b679-8620744acfb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules\Backtrack">
+      <UniqueIdentifier>{63f6c6aa-3d00-4a0c-8eb6-41466d8c399b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
