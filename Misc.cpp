@@ -3,7 +3,6 @@
 #include <chrono>
 #include <sstream>
 
-#include "Radar.h"
 CMisc gMisc;
 
 namespace Global {
