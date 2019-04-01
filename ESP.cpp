@@ -3,6 +3,7 @@
 #include "Util.h"
 
 #include "Aimbot.h"
+#include "Misc.h"
 #include "Backtrack.h"
 
 #include "CEtags.h"
@@ -227,7 +228,7 @@ void CESP::Player_ESP(CBaseEntity* pLocal, CBaseEntity* pEntity)
 		}
 	}
 
-	if (visualize_backtrack.value) {
+	if (gMisc.backtrack.value && visualize_backtrack.value) {
 		if (backtrack::ticks[pEntity->GetIndex()].empty()) {
 			return;
 		}
