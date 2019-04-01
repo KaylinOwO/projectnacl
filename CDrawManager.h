@@ -13,6 +13,9 @@ class CDrawManager
 {
 public:
 	void Initialize( );
+	void Reload();
+	void InitializeFonts();
+	void ReloadFonts();
 	void DrawString( int x, int y, Color clrColor, const wchar_t *pszText);
 	void DrawString( int x, int y, Color clrColor, const char *pszText, ... );
 	byte GetESPHeight( );

@@ -497,10 +497,8 @@ int CAimbot::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 
 			}
 			if (waitforcharge.value) //This isn't the best code but it works for raging.
-			{
 				if (waitforcharge.value && ZOOM_BASE_DAMAGE + damage < pEntity->GetHealth())//<
 					return -1;
-			}
 		}
 
 		float flFOV = GetFOV(pCommand->viewangles, vLocal, vEntity);

@@ -21,12 +21,10 @@ void CTriggerbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 		return;
 
 	Vector vAim;
-	gInts.Engine->GetViewAngles(vAim); //We use getviewangles so that this can work with anti-aim when it gets added
+	gInts.Engine->GetViewAngles(vAim); //We use getviewangles so that this can work with anti-aim
 
 	Vector vForward;
 	AngleVectors(vAim, &vForward);
-	//How far we wanna look forward, lower this value if needed
-
 
 	auto pClass = pWep->GetItemDefinitionIndex();
 

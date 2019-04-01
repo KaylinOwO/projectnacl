@@ -2,17 +2,34 @@
 //===================================================================================
 CDrawManager gDrawManager;
 
-//===================================================================================
-void CDrawManager::Initialize( )
+void CDrawManager::Initialize() // Create font IDs here
 {
-	if ( gInts.Surface == NULL )
+	if (gInts.Surface == NULL)
 		return;
 
-	gInts.Engine->GetScreenSize( gScreenSize.iScreenWidth, gScreenSize.iScreenHeight );
-	m_Font = gInts.Surface->CreateFont( );	//This is better than Arial
-	gInts.Surface->SetFontGlyphSet( m_Font, "Verdana", 12, 500, 0, 0, 0x200 );
+	InitializeFonts();
+
+	Reload();
 }
-//===================================================================================
+void CDrawManager::Reload() // Create (or reload) your font styles
+{
+	if (gInts.Surface == NULL)
+		return;
+
+	gInts.Engine->GetScreenSize(gScreenSize.iScreenWidth, gScreenSize.iScreenHeight);
+
+	ReloadFonts();
+}
+
+void CDrawManager::InitializeFonts()
+{
+	m_Font = gInts.Surface->CreateFont();
+}
+
+void CDrawManager::ReloadFonts()
+{
+	gInts.Surface->SetFontGlyphSet(m_Font, "Verdana", 12, 500, 0, 0, 0x200);
+}
 
 void CDrawManager::DrawStringCenter(int x, int y, Color clrColor, const char* szText, ...)
 {

@@ -58,7 +58,10 @@ void __fastcall Hooked_PaintTraverse( PVOID pPanels, int edx, unsigned int vguiP
 			CScreenSize newSize;
 			gInts.Engine->GetScreenSize(newSize.iScreenWidth, newSize.iScreenWidth);
 			if (newSize.iScreenWidth != gScreenSize.iScreenWidth || newSize.iScreenHeight != gScreenSize.iScreenHeight)
+			{
 				gDraw.Reload();
+				gDrawManager.Reload();
+			}
 			gMenu.GetInput();
 			gMenu.Draw();
 			gInts.Panels->SetMouseInputEnabled(vguiPanel, gMenu.enabled);
