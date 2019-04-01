@@ -228,7 +228,7 @@ void CESP::Player_ESP(CBaseEntity* pLocal, CBaseEntity* pEntity)
 		}
 	}
 
-	if (gMisc.backtrack.value && visualize_backtrack.value) {
+	if (pLocal->IsAlive() && gMisc.backtrack.value && visualize_backtrack.value) {
 		if (backtrack::ticks[pEntity->GetIndex()].empty()) {
 			return;
 		}
