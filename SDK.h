@@ -2180,6 +2180,11 @@ public:
 		typedef void(__thiscall* ClientCmdFn)(void*, const char*);
 		return getvfunc<ClientCmdFn>(this, 7)(this, szCommandString);
 	}
+	int GetAppId()
+	{
+		typedef int(__thiscall* OriginalFn)(PVOID);
+		return getvfunc<OriginalFn>(this, 104)(this);
+	}
 	void ClientCmd_Unrestricted( const char* chCommandString )
 	{
 		typedef void ( __thiscall* OriginalFn )( PVOID, const char * );
