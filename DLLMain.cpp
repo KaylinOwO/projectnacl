@@ -63,10 +63,10 @@ DWORD WINAPI dwMainThread( LPVOID lpArguments )
 		gInts.ModelInfo = ( IVModelInfo* ) EngineFactory( "VModelInfoClient006", NULL );
 		gInts.cvar = (ICvar*)CvarFactory("VEngineCvar004", NULL);
 		if (GAME_TF2)
-		{
 			gInts.MatSystem = (CMaterialSystem*)MaterialSystemFactory("VMaterialSystem081", NULL);
-			gInts.ModelRender = (CModelRender*)EngineFactory("VEngineModel016", NULL);
-		}
+		else
+			gInts.MatSystemOther = (CMaterialSystemOther*)MaterialSystemFactory("VMaterialSystem080", NULL);
+		gInts.ModelRender = (CModelRender*)EngineFactory("VEngineModel016", NULL);
 		gInts.EventManager = (IGameEventManager2*)EngineFactory("GAMEEVENTSMANAGER002", NULL);
 		gInts.steamclient = (ISteamClient017*)SteamFactory("SteamClient017", NULL);
 
@@ -83,8 +83,7 @@ DWORD WINAPI dwMainThread( LPVOID lpArguments )
 		XASSERT(gInts.EngineTrace);
 		XASSERT(gInts.ModelInfo);
 		XASSERT(gInts.cvar);
-		if (GAME_TF2)
-			XASSERT(gInts.ModelRender);
+		XASSERT(gInts.ModelRender);
 		XASSERT(gInts.EventManager);
 		XASSERT(gInts.steamclient);
 		XASSERT(gInts.steamfriends);
@@ -150,12 +149,9 @@ DWORD WINAPI dwMainThread( LPVOID lpArguments )
 		clientHook->HookMethod(&FrameStageNotifyThink, 35);
 		clientHook->Rehook();
 
-		if (GAME_TF2)
-		{
-			defRenderHook->Init(gInts.ModelRender);
-			defRenderHook->HookMethod(&Hooked_DrawModelExecute, 19);
-			defRenderHook->Rehook();
-		}
+		defRenderHook->Init(gInts.ModelRender);
+		defRenderHook->HookMethod(&Hooked_DrawModelExecute, 19);
+		defRenderHook->Rehook();
 
 		HWND thisWindow;
 		while (!(thisWindow = FindWindow("Valve001", NULL)))

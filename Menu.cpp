@@ -187,6 +187,12 @@ void Menu::CreateGUI()
 					&gESP.thirdperson,
 					&gESP.visualize_backtrack,
 				}, GROUP_WIDTH),
+
+				new Groupbox("World Modulation",{
+					&gESP.world_enabled,
+					&gESP.world_clr,
+					&gESP.sky_clr,
+				}, GROUP_WIDTH)
 			})
 			);
 

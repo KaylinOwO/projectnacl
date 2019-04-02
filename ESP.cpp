@@ -437,7 +437,12 @@ void CESP::FrameStageNotify(ClientFrameStage_t Stage)
 		{
 			for (auto& hMat : worldmats_old) // Reset the material colors
 			{
-				IMaterial* mat = gInts.MatSystem->GetMaterial(hMat.first);
+				IMaterial* mat;
+				if (GAME_TF2)
+					mat = gInts.MatSystem->GetMaterial(hMat.first);
+				else
+					mat = gInts.MatSystemOther->GetMaterial(hMat.first);
+
 				if (!mat)
 					continue;
 
@@ -454,40 +459,80 @@ void CESP::FrameStageNotify(ClientFrameStage_t Stage)
 
 	if (!world_enabled.value || Stage != FRAME_NET_UPDATE_POSTDATAUPDATE_END)
 		return;
-
-	for (MaterialHandle_t i = gInts.MatSystem->FirstMaterial(); i != gInts.MatSystem->InvalidMaterial(); i = gInts.MatSystem->NextMaterial(i))
+	if (GAME_TF2)
 	{
-		IMaterial* mat = gInts.MatSystem->GetMaterial(i);
-		if (!mat)
-			continue;
-
-		bool bIsSkybox = !strcmp(mat->GetTextureGroupName(), TEXTURE_GROUP_SKYBOX);
-		if (!bIsSkybox && strcmp(mat->GetTextureGroupName(), TEXTURE_GROUP_WORLD))
-			continue;
-
-		if (worldmats_new.find(i) == worldmats_new.end())
+		for (MaterialHandle_t i = gInts.MatSystem->FirstMaterial(); i != gInts.MatSystem->InvalidMaterial(); i = gInts.MatSystem->NextMaterial(i))
 		{
-			float r, g, b, a = mat->GetAlphaModulation();
-			mat->GetColorModulation(&r, &g, &b);
+			IMaterial* mat = gInts.MatSystem->GetMaterial(i);
+			if (!mat)
+				continue;
 
-			SColor old_color(r * 255.f, g * 255.f, b * 255.f, a * 255.f);
-			worldmats_old.emplace(i, old_color);
-			worldmats_new.emplace(i, old_color);
+			bool bIsSkybox = !strcmp(mat->GetTextureGroupName(), TEXTURE_GROUP_SKYBOX);
+			if (!bIsSkybox && strcmp(mat->GetTextureGroupName(), TEXTURE_GROUP_WORLD))
+				continue;
+
+			if (worldmats_new.find(i) == worldmats_new.end())
+			{
+				float r, g, b, a = mat->GetAlphaModulation();
+				mat->GetColorModulation(&r, &g, &b);
+
+				SColor old_color(r * 255.f, g * 255.f, b * 255.f, a * 255.f);
+				worldmats_old.emplace(i, old_color);
+				worldmats_new.emplace(i, old_color);
+			}
+
+			SColor color = worldmats_old.at(i);
+			if (bIsSkybox)
+				color = sky_clr.bDef ? SColor(255) : sky_clr.color;
+			else
+				color = world_clr.bDef ? SColor(255) : world_clr.color;
+
+			if (worldmats_new.at(i) != color)
+			{
+				float blend[4] = { (float)color[0] / 255.f, (float)color[1] / 255.f, (float)color[2] / 255.f, (float)color[3] / 255.f };
+				mat->ColorModulate(blend[0], blend[1], blend[2]);
+				mat->AlphaModulate(blend[3]);
+
+				worldmats_new.at(i) = color;
+			}
 		}
-
-		SColor color = worldmats_old.at(i);
-		if (bIsSkybox)
-			color = sky_clr.bDef ? SColor(255) : sky_clr.color;
-		else
-			color = world_clr.bDef ? SColor(255) : world_clr.color;
-
-		if (worldmats_new.at(i) != color)
+	}
+	else
+	{
+		for (MaterialHandle_t i = gInts.MatSystemOther->FirstMaterial(); i != gInts.MatSystemOther->InvalidMaterial(); i = gInts.MatSystemOther->NextMaterial(i))
 		{
-			float blend[4] = { (float)color[0] / 255.f, (float)color[1] / 255.f, (float)color[2] / 255.f, (float)color[3] / 255.f };
-			mat->ColorModulate(blend[0], blend[1], blend[2]);
-			mat->AlphaModulate(blend[3]);
+			IMaterial* mat = gInts.MatSystemOther->GetMaterial(i);
+			if (!mat)
+				continue;
 
-			worldmats_new.at(i) = color;
+			bool bIsSkybox = !strcmp(mat->GetTextureGroupName(), TEXTURE_GROUP_SKYBOX);
+			if (!bIsSkybox && strcmp(mat->GetTextureGroupName(), TEXTURE_GROUP_WORLD))
+				continue;
+
+			if (worldmats_new.find(i) == worldmats_new.end())
+			{
+				float r, g, b, a = mat->GetAlphaModulation();
+				mat->GetColorModulation(&r, &g, &b);
+
+				SColor old_color(r * 255.f, g * 255.f, b * 255.f, a * 255.f);
+				worldmats_old.emplace(i, old_color);
+				worldmats_new.emplace(i, old_color);
+			}
+
+			SColor color = worldmats_old.at(i);
+			if (bIsSkybox)
+				color = sky_clr.bDef ? SColor(255) : sky_clr.color;
+			else
+				color = world_clr.bDef ? SColor(255) : world_clr.color;
+
+			if (worldmats_new.at(i) != color)
+			{
+				float blend[4] = { (float)color[0] / 255.f, (float)color[1] / 255.f, (float)color[2] / 255.f, (float)color[3] / 255.f };
+				mat->ColorModulate(blend[0], blend[1], blend[2]);
+				mat->AlphaModulate(blend[3]);
+
+				worldmats_new.at(i) = color;
+			}
 		}
 	}
 }

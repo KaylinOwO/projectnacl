@@ -536,3 +536,43 @@ public:
 		return getvfunc<OriginalFn>(this, 76)(this, h);
 	}
 };
+
+class CMaterialSystemOther
+{
+public:
+	IMaterial* FindMaterial(char const* pMaterialName, const char *pTextureGroupName, bool complain = true, const char *pComplainPrefix = NULL)
+	{
+		typedef IMaterial *(__thiscall *OriginalFn)(PVOID, const char *, const char *, bool, const char *);
+		return getvfunc<OriginalFn>(this, 71)(this, pMaterialName, pTextureGroupName, complain, pComplainPrefix);
+	}
+
+	IMaterial* CreateMaterial(char const* pMaterialName, KeyValues* kv)
+	{
+		typedef IMaterial *(__thiscall *OriginalFn)(PVOID, const char*, KeyValues*);
+		return getvfunc<OriginalFn>(this, 70)(this, pMaterialName, kv);
+	}
+
+	IMaterial* GetMaterial(MaterialHandle_t h)
+	{
+		typedef IMaterial *(__thiscall *OriginalFn)(PVOID, MaterialHandle_t);
+		return getvfunc<OriginalFn>(this, 76)(this, h);
+	}
+
+	MaterialHandle_t FirstMaterial()
+	{
+		typedef MaterialHandle_t(__thiscall *OriginalFn)(PVOID);
+		return getvfunc<OriginalFn>(this, 73)(this);
+	}
+
+	MaterialHandle_t InvalidMaterial()
+	{
+		typedef MaterialHandle_t(__thiscall *OriginalFn)(PVOID);
+		return getvfunc<OriginalFn>(this, 75)(this);
+	}
+
+	MaterialHandle_t NextMaterial(MaterialHandle_t h)
+	{
+		typedef MaterialHandle_t(__thiscall *OriginalFn)(PVOID, MaterialHandle_t);
+		return getvfunc<OriginalFn>(this, 74)(this, h);
+	}
+};

@@ -2758,6 +2758,7 @@ public:
 	CRenderView* RenderView;
 	CModelRender* ModelRender;
 	CMaterialSystem* MatSystem;
+	CMaterialSystemOther* MatSystemOther;
 	ISteamClient017* steamclient;
 	ISteamFriends002* steamfriends;
 	ISteamUser017* steamuser;
