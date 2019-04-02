@@ -8,6 +8,7 @@
 #include "Misc.h"
 #include "Backtrack.h"
 #include "AutoAirblast.h"
+#include "SFreezing.h"
 #include "Sticky.h"
 #include "CMat.h"
 #include "CDrawManager.h"
@@ -62,8 +63,12 @@ bool __fastcall Hooked_CreateMove(PVOID ClientMode, int edx, float input_sample_
 		gAim.Run(pLocal, pCommand);
 		gHvH.Run(pLocal, pCommand, bSendPacket);
 		gTrigger.Run(pLocal, pCommand);
-		gBlast.Run(pLocal, pCommand);
-		gSticky.Run(pLocal, pCommand);
+		gSequenceFreezing.Run(pLocal, pCommand);
+		if (GAME_TF2)
+		{
+			gBlast.Run(pLocal, pCommand);
+			gSticky.Run(pLocal, pCommand);
+		}
 		backtrack::do_backtrack();
 	}
 	catch (...)
@@ -80,44 +85,47 @@ void __fastcall FrameStageNotifyThink(PVOID CHLClient, void *_this, ClientFrameS
 
 	if (Stage == FRAME_NET_UPDATE_POSTDATAUPDATE_START)
 	{
-		for (auto i = 1; i <= gInts.Engine->GetMaxClients(); i++)
+		if (GAME_TF2)
 		{
-			CBaseEntity *entity = nullptr;
-			player_info_t temp;
-
-			if (!(entity = gInts.EntList->GetClientEntity(i)))
-				continue;
-
-			if (entity->IsDormant())
-				continue;
-
-			if (!gInts.Engine->GetPlayerInfo(i, &temp))
-				continue;
-
-			if (!entity->GetLifeState() == LIFE_ALIVE)
-				continue;
-
-			Vector vX = entity->GetAngles();
-			Vector vY = entity->GetAnglesHTC();
-			auto *WritePitch = reinterpret_cast<float*>(reinterpret_cast<DWORD>(entity) + gNetVars.get_offset("DT_TFPlayer", "tfnonlocaldata", "m_angEyeAngles[0]"));
-			auto *WriteYaw = reinterpret_cast<float*>(reinterpret_cast<DWORD>(entity) + gNetVars.get_offset("DT_TFPlayer", "tfnonlocaldata", "m_angEyeAngles[1]"));
-
-			bool resolver = false;
-
-			if (Util->IsKeyPressedMisc(gCvars.aimbot_resolver_key))
+			for (auto i = 1; i <= gInts.Engine->GetMaxClients(); i++)
 			{
-				resolver = !resolver;
-			}
-			if (gCvars.aimbot_resolver && resolver)
-			{
-				if (vX.x == -89.0f) 
+				CBaseEntity *entity = nullptr;
+				player_info_t temp;
+
+				if (!(entity = gInts.EntList->GetClientEntity(i)))
+					continue;
+
+				if (entity->IsDormant())
+					continue;
+
+				if (!gInts.Engine->GetPlayerInfo(i, &temp))
+					continue;
+
+				if (!entity->GetLifeState() == LIFE_ALIVE)
+					continue;
+
+				Vector vX = entity->GetAngles();
+				Vector vY = entity->GetAnglesHTC();
+				auto *WritePitch = reinterpret_cast<float*>(reinterpret_cast<DWORD>(entity) + gNetVars.get_offset("DT_TFPlayer", "tfnonlocaldata", "m_angEyeAngles[0]"));
+				auto *WriteYaw = reinterpret_cast<float*>(reinterpret_cast<DWORD>(entity) + gNetVars.get_offset("DT_TFPlayer", "tfnonlocaldata", "m_angEyeAngles[1]"));
+
+				bool resolver = false;
+
+				if (Util->IsKeyPressedMisc(gCvars.aimbot_resolver_key))
 				{
-					*WritePitch = 90.0f;
+					resolver = !resolver;
 				}
-				if (vX.x == 89.0f) 
+				if (gCvars.aimbot_resolver && resolver)
 				{
-					*WritePitch = -90.0f;
-				}	
+					if (vX.x == -89.0f)
+					{
+						*WritePitch = 90.0f;
+					}
+					if (vX.x == 89.0f)
+					{
+						*WritePitch = -90.0f;
+					}
+				}
 			}
 		}
    }
@@ -158,112 +166,6 @@ void __fastcall FrameStageNotifyThink(PVOID CHLClient, void *_this, ClientFrameS
 			else if (!gESP.thirdperson.value)
 			{
 				gInts.Engine->ClientCmd_Unrestricted("firstperson");
-			}
-
-			bool bSkyNeedsUpdate = true;
-			if (bSkyNeedsUpdate && gInts.Engine->IsInGame())
-			{
-				typedef bool(_cdecl* LoadNamedSkysFn)(const char*);
-				static LoadNamedSkysFn LoadSkys = (LoadNamedSkysFn)gSignatures.GetEngineSignature("55 8B EC 81 EC ? ? ? ? 8B 0D ? ? ? ? 53 56 57 8B 01 C7 45");
-
-				auto OriginalSky = gInts.cvar->FindVar("sv_skyname")->GetString();
-				OriginalSky; //Stores the current skyname
-				if (gCvars.sky_changer)
-				{
-					if (gInts.cvar->FindVar("sv_skyname")->GetString() != "sky_night_01")
-					{
-						if (gCvars.sky_changer_value == 0)
-						{
-							LoadSkys("sky_night_01");
-							bool bSkyNeedsUpdate = true;
-						}
-					}
-
-					if (gInts.cvar->FindVar("sv_skyname")->GetString() != "sky_nightfall_01")
-					{
-						if (gCvars.sky_changer_value == 1)
-						{
-							LoadSkys("sky_nightfall_01");
-							bool bSkyNeedsUpdate = true;
-						}
-					}
-
-					if (gInts.cvar->FindVar("sv_skyname")->GetString() != "sky_harvest_night_01")
-					{
-						if (gCvars.sky_changer_value == 2)
-						{
-							LoadSkys("sky_harvest_night_01");
-							bool bSkyNeedsUpdate = true;
-						}
-					}
-
-					if (gInts.cvar->FindVar("sv_skyname")->GetString() != "sky_halloween")
-					{
-						if (gCvars.sky_changer_value == 3)
-						{
-							LoadSkys("sky_halloween");
-							bool bSkyNeedsUpdate = true;
-						}
-					}
-					bSkyNeedsUpdate = false;
-				}
-				else
-				{
-					LoadSkys(OriginalSky);
-					bool bSkyNeedsUpdate = true;
-				}
-			}
-
-			for (auto i = 1; i <= gInts.Engine->GetMaxClients(); i++) //This is big heads/big torso, quite simple and at the same time shitty.
-			{
-				CBaseEntity* pEntity = gInts.EntList->GetClientEntity(i);
-				CBaseEntity *entity = nullptr;
-				player_info_t temp;
-
-				if (!(entity = gInts.EntList->GetClientEntity(i)))
-					continue;
-
-				if (entity->IsDormant())
-					continue;
-
-				if (!gInts.Engine->GetPlayerInfo(i, &temp))
-					continue;
-
-				if (!entity->GetLifeState() == LIFE_ALIVE)
-					continue;
-				if (!(entity = gInts.EntList->GetClientEntity(i)))
-					continue;
-
-				if (entity->IsDormant())
-					continue;
-
-				if (!gInts.Engine->GetPlayerInfo(i, &temp))
-					continue;
-
-				if (!entity->GetLifeState() == LIFE_ALIVE)
-					continue;
-
-				if (gCvars.misc_bigheadisbig)
-				{
-					auto *headsize = reinterpret_cast<float*>(reinterpret_cast<DWORD>(pEntity) + gNetVars.get_offset("DT_TFPlayer", "m_flHeadScale"));
-					*headsize = 5.0f;
-				}
-				else if (!gCvars.misc_bigheadisbig || !gCvars.vismisc_active)
-				{
-					auto *headsize = reinterpret_cast<float*>(reinterpret_cast<DWORD>(pEntity) + gNetVars.get_offset("DT_TFPlayer", "m_flHeadScale"));
-					*headsize = 1.0f;
-				}
-
-				if (gCvars.misc_bigtorsoisbig)
-				{
-					auto *torsosize = reinterpret_cast<float*>(reinterpret_cast<DWORD>(pEntity) + gNetVars.get_offset("DT_TFPlayer", "m_flTorsoScale"));
-					*torsosize = 5.0f;
-				}
-				else if (!gCvars.misc_bigtorsoisbig || !gCvars.vismisc_active)
-				{
-					auto *torsosize = reinterpret_cast<float*>(reinterpret_cast<DWORD>(pEntity) + gNetVars.get_offset("DT_TFPlayer", "m_flTorsoScale"));
-					*torsosize = 1.0f;
-				}
 			}
 	}
 

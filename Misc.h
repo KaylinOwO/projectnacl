@@ -21,6 +21,10 @@ public:
 	Checkbox nopush = Checkbox("No Push");
 	Checkbox cscreenshots = Checkbox("Clean Screenshots");
 	Checkbox purebypass = Checkbox("Pure Bypass");
+	Checkbox sfreezing = Checkbox("Time Shift");
+	Listbox sfreezing_key = Listbox("Time Shift Key", { "None", "Mouse 3", "Mouse 4", "Mouse 5", "Shift", "Alt", "F", "E"}, 0);
+	Slider sfreezing_value = Slider("Time Shift Value", 1, 1, 2500, 1);
+
 
 	Checkbox backtrack = Checkbox("Backtrack");
 	Slider backtrack_ticks = Slider("Backtrack Ticks", 0, 0, 12, 1);

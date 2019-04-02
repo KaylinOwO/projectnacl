@@ -264,87 +264,91 @@ void CAimbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 	if (!Util->IsKeyPressed(key.value))
 		return;
 
-	if (!pLocal->GetActiveWeapon())
-		return;
+	if (GAME_TF2)
+		if (!pLocal->GetActiveWeapon())
+			return;
 
-	auto id = pLocal->GetActiveWeapon()->GetItemDefinitionIndex(); //This ignores all projectile weapons, doesn't work for strange/killstreak/etc
-	if (
+	if (GAME_TF2)
+	{
+		auto id = pLocal->GetActiveWeapon()->GetItemDefinitionIndex(); //This ignores all projectile weapons, doesn't work for strange/killstreak/etc
+		if (
 #pragma region scout
-		id == (int)scoutweapons::WPN_Sandman
-		|| id == (int)scoutweapons::WPN_CritCola
-		|| id == (int)scoutweapons::WPN_CritCola
-		|| id == (int)scoutweapons::WPN_FlyingGuillotine1
-		|| id == (int)scoutweapons::WPN_FlyingGuillotine2
-		|| id == (int)scoutweapons::WPN_Milk
-		|| id == (int)scoutweapons::WPN_MutatedMilk
-		|| id == (int)scoutweapons::WPN_WrapAssassin
+			id == (int)scoutweapons::WPN_Sandman
+			|| id == (int)scoutweapons::WPN_CritCola
+			|| id == (int)scoutweapons::WPN_CritCola
+			|| id == (int)scoutweapons::WPN_FlyingGuillotine1
+			|| id == (int)scoutweapons::WPN_FlyingGuillotine2
+			|| id == (int)scoutweapons::WPN_Milk
+			|| id == (int)scoutweapons::WPN_MutatedMilk
+			|| id == (int)scoutweapons::WPN_WrapAssassin
 #pragma endregion
 #pragma region pyro
-		|| id == (int)pyroweapons::WPN_Detonator
-		//	|| id == (int)pyroweapons::WPN_FestiveFlaregun
-		//	|| id == (int)pyroweapons::WPN_Flaregun
-		|| id == (int)pyroweapons::WPN_ScorchShot
+			|| id == (int)pyroweapons::WPN_Detonator
+			//	|| id == (int)pyroweapons::WPN_FestiveFlaregun
+			//	|| id == (int)pyroweapons::WPN_Flaregun
+			|| id == (int)pyroweapons::WPN_ScorchShot
 #pragma endregion
 #pragma region demo
-		//|| id == (int)demomanweapons::WPN_FestiveGrenadeLauncher
-		//|| id == (int)demomanweapons::WPN_FestiveStickyLauncher
-		//|| id == (int)demomanweapons::WPN_GrenadeLauncher
-		//|| id == (int)demomanweapons::WPN_IronBomber
-		//|| id == (int)demomanweapons::WPN_LochNLoad
-		//|| id == (int)demomanweapons::WPN_LoooseCannon
-		//|| id == (int)demomanweapons::WPN_QuickieBombLauncher
-		//|| id == (int)demomanweapons::WPN_StickyLauncher
-		|| id == (int)demomanweapons::WPN_ScottsSkullctter
+			//|| id == (int)demomanweapons::WPN_FestiveGrenadeLauncher
+			//|| id == (int)demomanweapons::WPN_FestiveStickyLauncher
+			//|| id == (int)demomanweapons::WPN_GrenadeLauncher
+			//|| id == (int)demomanweapons::WPN_IronBomber
+			//|| id == (int)demomanweapons::WPN_LochNLoad
+			//|| id == (int)demomanweapons::WPN_LoooseCannon
+			//|| id == (int)demomanweapons::WPN_QuickieBombLauncher
+			//|| id == (int)demomanweapons::WPN_StickyLauncher
+			|| id == (int)demomanweapons::WPN_ScottsSkullctter
 #pragma endregion
 #pragma region heavy
-		|| id == (int)heavyweapons::WPN_FestiveSandvich
-		|| id == (int)heavyweapons::WPN_RobotSandvich
-		|| id == (int)heavyweapons::WPN_Sandvich
-		|| id == (int)heavyweapons::WPN_Steak
-		|| id == (int)heavyweapons::WPN_CandyBar
-		|| id == (int)heavyweapons::WPN_Fishcake
+			|| id == (int)heavyweapons::WPN_FestiveSandvich
+			|| id == (int)heavyweapons::WPN_RobotSandvich
+			|| id == (int)heavyweapons::WPN_Sandvich
+			|| id == (int)heavyweapons::WPN_Steak
+			|| id == (int)heavyweapons::WPN_CandyBar
+			|| id == (int)heavyweapons::WPN_Fishcake
 #pragma endregion
 #pragma region engineer
-		|| id == (int)engineerweapons::WPN_Builder
-		|| id == (int)engineerweapons::WPN_Builder2
-		|| id == (int)engineerweapons::WPN_Destructor
-		|| id == (int)engineerweapons::WPN_FestiveWrangler
-		|| id == (int)engineerweapons::WPN_Pomson
-		//|| id == (int)engineerweapons::WPN_RescueRanger
-		|| id == (int)engineerweapons::WPN_ShortCircut
-		|| id == (int)engineerweapons::WPN_Toolbox
-		|| id == (int)engineerweapons::WPN_Wrangler
+			|| id == (int)engineerweapons::WPN_Builder
+			|| id == (int)engineerweapons::WPN_Builder2
+			|| id == (int)engineerweapons::WPN_Destructor
+			|| id == (int)engineerweapons::WPN_FestiveWrangler
+			|| id == (int)engineerweapons::WPN_Pomson
+			//|| id == (int)engineerweapons::WPN_RescueRanger
+			|| id == (int)engineerweapons::WPN_ShortCircut
+			|| id == (int)engineerweapons::WPN_Toolbox
+			|| id == (int)engineerweapons::WPN_Wrangler
 #pragma endregion
 #pragma region medic
-		//	|| id == (int)medicweapons::WPN_Blutsauger
-		|| id == (int)medicweapons::WPN_FestiveCrossbow
-		|| id == (int)medicweapons::WPN_FestiveMedigun
-		|| id == (int)medicweapons::WPN_Kritzkrieg
-		|| id == (int)medicweapons::WPN_Medigun
-		//	|| id == (int)medicweapons::WPN_Overdose
-		|| id == (int)medicweapons::WPN_QuickFix
-		//|| id == (int)medicweapons::WPN_SyringeGun
-		|| id == (int)medicweapons::WPN_Vaccinator
+			//	|| id == (int)medicweapons::WPN_Blutsauger
+			|| id == (int)medicweapons::WPN_FestiveCrossbow
+			|| id == (int)medicweapons::WPN_FestiveMedigun
+			|| id == (int)medicweapons::WPN_Kritzkrieg
+			|| id == (int)medicweapons::WPN_Medigun
+			//	|| id == (int)medicweapons::WPN_Overdose
+			|| id == (int)medicweapons::WPN_QuickFix
+			//|| id == (int)medicweapons::WPN_SyringeGun
+			|| id == (int)medicweapons::WPN_Vaccinator
 
 #pragma endregion
 #pragma region sniper
-		|| id == (int)sniperweapons::WPN_CompoundBow
-		|| id == (int)sniperweapons::WPN_FestiveJarate
-		|| id == (int)sniperweapons::WPN_FestiveHuntsman
-		|| id == (int)sniperweapons::WPN_Huntsman
-		|| id == (int)sniperweapons::WPN_Jarate
+			|| id == (int)sniperweapons::WPN_CompoundBow
+			|| id == (int)sniperweapons::WPN_FestiveJarate
+			|| id == (int)sniperweapons::WPN_FestiveHuntsman
+			|| id == (int)sniperweapons::WPN_Huntsman
+			|| id == (int)sniperweapons::WPN_Jarate
 #pragma endregion
 #pragma region spy
-		|| id == (int)spyweapons::WPN_ApSap
-		|| id == (int)spyweapons::WPN_DisguiseKit
-		|| id == (int)spyweapons::WPN_RedTape1
-		|| id == (int)spyweapons::WPN_RedTape2
-		|| id == (int)spyweapons::WPN_Sapper
-		|| id == (int)spyweapons::WPN_Sapper2
-		|| id == (int)spyweapons::WPN_FestiveSapper
+			|| id == (int)spyweapons::WPN_ApSap
+			|| id == (int)spyweapons::WPN_DisguiseKit
+			|| id == (int)spyweapons::WPN_RedTape1
+			|| id == (int)spyweapons::WPN_RedTape2
+			|| id == (int)spyweapons::WPN_Sapper
+			|| id == (int)spyweapons::WPN_Sapper2
+			|| id == (int)spyweapons::WPN_FestiveSapper
 #pragma endregion
-		)
-		return;
+			)
+			return;
+	}
 
 
 
@@ -358,11 +362,13 @@ void CAimbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 	if (iBestHitbox == -1)
 		return;
 
-	auto pWep = pLocal->GetActiveWeapon();
-	if (waitforcharge.value) //Advanced Ambassador Wait For Charge!
-		if (pWep->GetItemDefinitionIndex() == spyweapons::WPN_Ambassador || pWep->GetItemDefinitionIndex() == spyweapons::WPN_FestiveAmbassador)
-			if (!CanAmbassadorHeadshot(pLocal)) return;
-
+	if (GAME_TF2)
+	{
+		auto pWep = pLocal->GetActiveWeapon();
+		if (waitforcharge.value) //Advanced Ambassador Wait For Charge!
+			if (pWep->GetItemDefinitionIndex() == spyweapons::WPN_Ambassador || pWep->GetItemDefinitionIndex() == spyweapons::WPN_FestiveAmbassador)
+				if (!CanAmbassadorHeadshot(pLocal)) return;
+	}
 
 	if (iBestHitbox == -1)
 		return;
@@ -372,9 +378,11 @@ void CAimbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 
 	Vector vAngs;
 
-	CBaseCombatWeapon* pWeapon = pLocal->GetActiveWeapon();
-
-	Projectile(pLocal, pEntity, pWeapon, vEntity);
+	if (GAME_TF2)
+	{
+		CBaseCombatWeapon* pWeapon = pLocal->GetActiveWeapon();
+		Projectile(pLocal, pEntity, pWeapon, vEntity);
+	}
 
 	VectorAngles((vEntity - vLocal), vAngs);
 
@@ -431,8 +439,6 @@ int CAimbot::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 		if (i == me)
 			continue;
 
-		auto weap = pLocal->GetActiveWeapon()->GetItemDefinitionIndex();
-
 		CBaseEntity* pEntity = GetBaseEntity(i);
 
 		if (!pEntity)
@@ -459,46 +465,51 @@ int CAimbot::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 		if (!gCvars.PlayerMode[i])
 			continue;
 
-		if (pEntity->GetCond() & TFCond_Ubercharged ||
-			pEntity->GetCond() & TFCond_UberchargeFading ||
-			pEntity->GetCond() & TFCond_Bonked)
-			continue;
 
-		if (pEntity->GetCond() & TFCond_Cloaked && ignorecloaked.value)
-			continue;
-
-		if (pEntity->GetCond() & TFCond_Disguised && ignoredisguised.value)
-			continue;
-
-		auto pWep = pLocal->GetActiveWeapon();
-		auto pClass = pWep->GetItemDefinitionIndex();
-		auto urmomgay = pClass == demomanweapons::WPN_Sword || pClass == demomanweapons::WPN_FestiveEyelander || pClass == demomanweapons::WPN_Golfclub || pClass == demomanweapons::WPN_ScottsSkullctter || pClass == demomanweapons::WPN_Headless;
-		if (pWep->GetSlot() == 2 && !urmomgay)
-			minimalDistance = 8.4;
-
-		if (pClass == demomanweapons::WPN_Sword || pClass == demomanweapons::WPN_FestiveEyelander || pClass == demomanweapons::WPN_Golfclub || pClass == demomanweapons::WPN_ScottsSkullctter || pClass == demomanweapons::WPN_Headless)
-			minimalDistance = 12.0;
-
-		if (pLocal->szGetClass() == "Pyro" && (pClass == pyroweapons::WPN_Backburner || pClass == pyroweapons::WPN_Degreaser || pClass == pyroweapons::WPN_FestiveBackburner || pClass == pyroweapons::WPN_FestiveFlamethrower || pClass == pyroweapons::WPN_Flamethrower || pClass == pyroweapons::WPN_Phlogistinator || pClass == pyroweapons::WPN_Rainblower))
-			minimalDistance = 17.0;
-
-
-		if (pLocal->szGetClass() == "Sniper" && pLocal->GetActiveWeapon()->GetSlot() == 0)
+		if (GAME_TF2)
 		{
-			float damage = pLocal->GetActiveWeapon()->GetChargeDamage();
-			if (zoomedonly.value)// || gCvars.aimbot.waitforcharge)
+			auto weap = pLocal->GetActiveWeapon()->GetItemDefinitionIndex();
+
+			if (pEntity->GetCond() & TFCond_Ubercharged ||
+				pEntity->GetCond() & TFCond_UberchargeFading ||
+				pEntity->GetCond() & TFCond_Bonked)
+				continue;
+
+			if (pEntity->GetCond() & TFCond_Cloaked && ignorecloaked.value)
+				continue;
+
+			if (pEntity->GetCond() & TFCond_Disguised && ignoredisguised.value)
+				continue;
+
+			auto pWep = pLocal->GetActiveWeapon();
+			auto pClass = pWep->GetItemDefinitionIndex();
+			auto urmomgay = pClass == demomanweapons::WPN_Sword || pClass == demomanweapons::WPN_FestiveEyelander || pClass == demomanweapons::WPN_Golfclub || pClass == demomanweapons::WPN_ScottsSkullctter || pClass == demomanweapons::WPN_Headless;
+			if (pWep->GetSlot() == 2 && !urmomgay)
+				minimalDistance = 8.4;
+
+			if (pClass == demomanweapons::WPN_Sword || pClass == demomanweapons::WPN_FestiveEyelander || pClass == demomanweapons::WPN_Golfclub || pClass == demomanweapons::WPN_ScottsSkullctter || pClass == demomanweapons::WPN_Headless)
+				minimalDistance = 12.0;
+
+			if (pLocal->szGetClass() == "Pyro" && (pClass == pyroweapons::WPN_Backburner || pClass == pyroweapons::WPN_Degreaser || pClass == pyroweapons::WPN_FestiveBackburner || pClass == pyroweapons::WPN_FestiveFlamethrower || pClass == pyroweapons::WPN_Flamethrower || pClass == pyroweapons::WPN_Phlogistinator || pClass == pyroweapons::WPN_Rainblower))
+				minimalDistance = 17.0;
+
+			if (pLocal->szGetClass() == "Sniper" && pLocal->GetActiveWeapon()->GetSlot() == 0)
 			{
-				if (!(pLocal->GetCond() & tf_cond::TFCond_Zoomed))
-					return -1;
+				float damage = pLocal->GetActiveWeapon()->GetChargeDamage();
+				if (zoomedonly.value)// || gCvars.aimbot.waitforcharge)
+				{
+					if (!(pLocal->GetCond() & tf_cond::TFCond_Zoomed))
+						return -1;
 
-				if (damage < 10.f)
-					return -1;
+					if (damage < 10.f)
+						return -1;
 
 
+				}
+				if (waitforcharge.value) //This isn't the best code but it works for raging.
+					if (waitforcharge.value && ZOOM_BASE_DAMAGE + damage < pEntity->GetHealth())//<
+						return -1;
 			}
-			if (waitforcharge.value) //This isn't the best code but it works for raging.
-				if (waitforcharge.value && ZOOM_BASE_DAMAGE + damage < pEntity->GetHealth())//<
-					return -1;
 		}
 
 		float flFOV = GetFOV(pCommand->viewangles, vLocal, vEntity);
@@ -529,25 +540,40 @@ int CAimbot::GetBestHitbox(CBaseEntity* pLocal, CBaseEntity* pEntity)
 {
 	int iBestHitbox = -1;
 
-	if (!hitbox.value)
+	if (GAME_TF2 || GAME_HL2DM)
 	{
-		if (Util->IsHeadshotWeapon(pLocal, pLocal->GetActiveWeapon()))
-			iBestHitbox = 0;
-		else
-			iBestHitbox = 4;
-		for (int i = iBestHitbox; i < 17; i++) // int i equals prioritized hitbux, so above we check the weapon so it prioritizes the proper hitbox.
+		if (!hitbox.value)
 		{
-			if (Util->IsVisible(pLocal, pEntity, pLocal->GetEyePosition(), pEntity->GetHitboxPosition(i)))
-				return i;
+			if (Util->IsHeadshotWeapon(pLocal, pLocal->GetActiveWeapon()))
+				iBestHitbox = 0;
+			else
+				iBestHitbox = 4;
+			for (int i = iBestHitbox; i < 17; i++) // int i equals prioritized hitbux, so above we check the weapon so it prioritizes the proper hitbox.
+			{
+				if (Util->IsVisible(pLocal, pEntity, pLocal->GetEyePosition(), pEntity->GetHitboxPosition(i)))
+					return i;
+			}
 		}
+		else if (hitbox.value == 1)
+			iBestHitbox = 0;
+		else if (hitbox.value == 2)
+			iBestHitbox = 4;
 	}
-	else if (hitbox.value == 1)
+	else
 	{
-		iBestHitbox = 0;
-	}
-	else if (hitbox.value == 2)
-	{
-		iBestHitbox = 4;
+		if (!hitbox.value)
+		{
+			iBestHitbox = 10;
+			for (int i = iBestHitbox; i < 17; i++) // int i equals prioritized hitbux, so above we check the weapon so it prioritizes the proper hitbox.
+			{
+				if (Util->IsVisible(pLocal, pEntity, pLocal->GetEyePosition(), pEntity->GetHitboxPosition(i)))
+					return i;
+			}
+		}
+		else if (hitbox.value == 1)
+			iBestHitbox = 12;
+		else if (hitbox.value == 2)
+			iBestHitbox = 10;
 	}
 
 	if (pEntity->GetHitboxPosition(iBestHitbox).IsZero())

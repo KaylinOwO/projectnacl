@@ -59,11 +59,14 @@ DWORD WINAPI dwMainThread( LPVOID lpArguments )
 		gInts.Engine = ( EngineClient* ) EngineFactory( "VEngineClient013", NULL );
 		gInts.Surface = ( ISurface* ) VGUIFactory( "VGUI_Surface030", NULL );
 		gInts.RenderView = (CRenderView*)EngineFactory("VEngineRenderView014", NULL);
-		gInts.MatSystem = (CMaterialSystem*)MaterialSystemFactory("VMaterialSystem081", NULL);
 		gInts.EngineTrace = ( IEngineTrace* ) EngineFactory( "EngineTraceClient003", NULL );
 		gInts.ModelInfo = ( IVModelInfo* ) EngineFactory( "VModelInfoClient006", NULL );
 		gInts.cvar = (ICvar*)CvarFactory("VEngineCvar004", NULL);
-		gInts.ModelRender = (CModelRender*)EngineFactory("VEngineModel016", NULL);
+		if (GAME_TF2)
+		{
+			gInts.MatSystem = (CMaterialSystem*)MaterialSystemFactory("VMaterialSystem081", NULL);
+			gInts.ModelRender = (CModelRender*)EngineFactory("VEngineModel016", NULL);
+		}
 		gInts.EventManager = (IGameEventManager2*)EngineFactory("GAMEEVENTSMANAGER002", NULL);
 		gInts.steamclient = (ISteamClient017*)SteamFactory("SteamClient017", NULL);
 
@@ -80,7 +83,8 @@ DWORD WINAPI dwMainThread( LPVOID lpArguments )
 		XASSERT(gInts.EngineTrace);
 		XASSERT(gInts.ModelInfo);
 		XASSERT(gInts.cvar);
-		XASSERT(gInts.ModelRender);
+		if (GAME_TF2)
+			XASSERT(gInts.ModelRender);
 		XASSERT(gInts.EventManager);
 		XASSERT(gInts.steamclient);
 		XASSERT(gInts.steamfriends);
@@ -104,22 +108,31 @@ DWORD WINAPI dwMainThread( LPVOID lpArguments )
 			}
 		}
 
-		for (int i = 0; i < 12; i++) //Code by blackfire62 - Competitive Convar Bypass
+		if (GAME_TF2)
 		{
-			ITFMatchGroupDescription* desc = GetMatchGroupDescription(i);
-
-			if (!desc || desc->m_iID > 9) //ID's over 9 are invalid
-				continue;
-
-			if (desc->m_bForceCompetitiveSettings)
+			for (int i = 0; i < 12; i++) //Code by blackfire62 - Competitive Convar Bypass
 			{
-				desc->m_bForceCompetitiveSettings = false;
+				ITFMatchGroupDescription* desc = GetMatchGroupDescription(i);
+
+				if (!desc || desc->m_iID > 9) //ID's over 9 are invalid
+					continue;
+
+				if (desc->m_bForceCompetitiveSettings)
+				{
+					desc->m_bForceCompetitiveSettings = false;
+				}
 			}
 		}
 
 		gInts.globals = *reinterpret_cast<CGlobals **>(gSignatures.GetEngineSignature("A1 ? ? ? ? 8B 11 68") + 8);
 		XASSERT(gInts.globals);
-		DWORD dwClientModeAddress = gSignatures.GetClientSignature("8B 0D ? ? ? ? 8B 02 D9 05");
+
+		DWORD dwClientModeAddress;
+		if (GAME_TF2)
+			dwClientModeAddress = gSignatures.GetClientSignature("8B 0D ? ? ? ? 8B 02 D9 05");
+		else
+			dwClientModeAddress = gSignatures.GetClientSignature("8B 0D ? ? ? ? 8B 01 5D FF 60 28 CC");
+		
 		XASSERT(dwClientModeAddress);
 		gInts.ClientMode = **(ClientModeShared***)(dwClientModeAddress + 2);
 		LOGDEBUG("g_pClientModeShared_ptr client.dll+0x%X", (DWORD)gInts.ClientMode - dwClientBase);
@@ -137,9 +150,12 @@ DWORD WINAPI dwMainThread( LPVOID lpArguments )
 		clientHook->HookMethod(&FrameStageNotifyThink, 35);
 		clientHook->Rehook();
 
-		defRenderHook->Init(gInts.ModelRender);
-		defRenderHook->HookMethod(&Hooked_DrawModelExecute, 19);
-		defRenderHook->Rehook();
+		if (GAME_TF2)
+		{
+			defRenderHook->Init(gInts.ModelRender);
+			defRenderHook->HookMethod(&Hooked_DrawModelExecute, 19);
+			defRenderHook->Rehook();
+		}
 
 		HWND thisWindow;
 		while (!(thisWindow = FindWindow("Valve001", NULL)))

@@ -69,6 +69,10 @@ class CBaseCombatWeapon;
 #define TIME_TO_TICKS(dt) ((int)(0.5f + (float)(dt) / gInts.globals->interval_per_tick))
 #define TICKS_TO_TIME(t) (gInts.globals->interval_per_tick * (t))
 
+#define GAME_HL2DM gInts.Engine->GetAppId() == 320
+#define GAME_TF2 gInts.Engine->GetAppId() == 440
+
+
 typedef struct player_info_s
 {
 	char			name[32];

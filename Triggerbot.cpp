@@ -5,14 +5,19 @@ CTriggerbot gTrigger;
 
 void CTriggerbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 {
-	CBaseCombatWeapon* pWep = pLocal->GetActiveWeapon();
+
 
 	if (pLocal->GetLifeState() != LIFE_ALIVE)
 		return;
 
-	if (backstab.value)
-		if (pLocal->szGetClass() == "Spy" && pWep->GetSlot() == 2 && pWep->CanBackStab())
-			pCommand->buttons |= IN_ATTACK;
+	if (GAME_TF2)
+	{
+		CBaseCombatWeapon* pWep = pLocal->GetActiveWeapon();
+
+		if (backstab.value)
+			if (pLocal->szGetClass() == "Spy" && pWep->GetSlot() == 2 && pWep->CanBackStab())
+				pCommand->buttons |= IN_ATTACK;
+	}
 
 	if (!enabled.value)
 		return;
@@ -26,14 +31,23 @@ void CTriggerbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 	Vector vForward;
 	AngleVectors(vAim, &vForward);
 
-	auto pClass = pWep->GetItemDefinitionIndex();
 
-	if (pWep->GetSlot() == 2)
-		vForward = vForward * 8 + pLocal->GetEyePosition();
-	else if (pLocal->szGetClass() == "Pyro" && pClass != 1178 && pWep->GetSlot() == 0)
-		vForward = vForward * 17 + pLocal->GetEyePosition();
+	if (GAME_TF2)
+	{
+		CBaseCombatWeapon* pWep = pLocal->GetActiveWeapon();
+
+		auto pClass = pWep->GetItemDefinitionIndex();
+
+		if (pWep->GetSlot() == 2)
+			vForward = vForward * 8 + pLocal->GetEyePosition();
+		else if (pLocal->szGetClass() == "Pyro" && pClass != 1178 && pWep->GetSlot() == 0)
+			vForward = vForward * 17 + pLocal->GetEyePosition();
+		else
+			vForward = vForward * 9999 + pLocal->GetEyePosition();
+	}
 	else
 		vForward = vForward * 9999 + pLocal->GetEyePosition();
+
 
 
 	Ray_t ray;
@@ -51,8 +65,9 @@ void CTriggerbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 	if (trace.hitgroup < 1)
 		return;
 
-	if (cloaked.value && trace.m_pEnt->GetCond() & TFCond_Cloaked)
-		return;
+	if (GAME_TF2)
+		if (cloaked.value && trace.m_pEnt->GetCond() & TFCond_Cloaked)
+			return;
 
 	if (headonly.value && trace.hitbox != 0)
 		return;

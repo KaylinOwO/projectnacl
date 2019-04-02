@@ -18,128 +18,229 @@ POINT pos = { 100, 100 }, scale = { 640, 480 };
 
 void Menu::CreateGUI()
 {
+	/*What you're about to see may cause severe eye bleeding*/
+	/*YOU HAVE BEEN WARNED*/
 
-	Tabs.AddTab(
-		new Tab("Aimbot", {
-			new Groupbox("General",{
-				&gAim.enabled,
-				&gAim.key,
-				&gAim.hitbox,
-				&gAim.fov,
-				&gAim.smooth,
-				&gAim.silent,
-				&gAim.Autoshoot,
-				&gAim.waitforcharge,
-				&gAim.zoomedonly,
-			}, GROUP_WIDTH),
+	if (GAME_TF2)
+	{
+		Tabs.AddTab(
+			new Tab("Aimbot", {
+				new Groupbox("General",{
+					&gAim.enabled,
+					&gAim.key,
+					&gAim.hitbox,
+					&gAim.fov,
+					&gAim.smooth,
+					&gAim.silent,
+					&gAim.Autoshoot,
+					&gAim.waitforcharge,
+					&gAim.zoomedonly,
+				}, GROUP_WIDTH),
 
-			new Groupbox("Ignore List",{
-				&gAim.ignorecloaked,
-				&gAim.ignoredisguised,
-			}, GROUP_WIDTH),
-		})
-		);
+				new Groupbox("Ignore List",{
+					&gAim.ignorecloaked,
+					&gAim.ignoredisguised,
+				}, GROUP_WIDTH),
+			})
+			);
 
-	Tabs.AddTab(
-		new Tab("Triggerbot", {
-			new Groupbox("Hitscan",{
-				&gTrigger.enabled,
-				&gTrigger.key,
-				&gTrigger.headonly,
-			    &gTrigger.cloaked,
-			}, GROUP_WIDTH),
+		Tabs.AddTab(
+			new Tab("Triggerbot", {
+				new Groupbox("Hitscan",{
+					&gTrigger.enabled,
+					&gTrigger.key,
+					&gTrigger.headonly,
+					&gTrigger.cloaked,
+				}, GROUP_WIDTH),
 
-			new Groupbox("Misc",{
-				&gTrigger.backstab,
-				&gTrigger.stickydetonate,
-				&gTrigger.airblast,
-				&gTrigger.airblastrage,
-			}, GROUP_WIDTH),
-		})
-		);
+				new Groupbox("Misc",{
+					&gTrigger.backstab,
+					&gTrigger.stickydetonate,
+					&gTrigger.airblast,
+					&gTrigger.airblastrage,
+				}, GROUP_WIDTH),
+			})
+			);
 
-	Tabs.AddTab(
-		new Tab("Visuals", {
-			new Groupbox("ESP",{
-				&gESP.enabled,
-				&gESP.enemyonly,
-				&gESP.box,
-				&gESP.name,
-				&gESP.tfclass,
-				&gESP.health,
-				&gESP.bones,
-				&gESP.viewlines,
-				&gESP.player_enabled,
-				&gESP.chamsmat,
-				&gESP.player_mat,
-				&gESP.ignorecloaked,
-			}, GROUP_WIDTH),
-		new Groupbox("Misc",{
-				&gESP.nozoom,
-				&gESP.noscope,
-				&gESP.thirdperson,
-				&gESP.visualize_backtrack,
-				&gESP.hands_enabled,
-				&gESP.hands_chams,
-				&gESP.hand_mat_color,
-			}, GROUP_WIDTH),
+		Tabs.AddTab(
+			new Tab("Visuals", {
+				new Groupbox("ESP",{
+					&gESP.enabled,
+					&gESP.enemyonly,
+					&gESP.box,
+					&gESP.name,
+					&gESP.tfclass,
+					&gESP.health,
+					&gESP.bones,
+					&gESP.viewlines,
+					&gESP.player_enabled,
+					&gESP.chamsmat,
+					&gESP.player_mat,
+					&gESP.ignorecloaked,
+				}, GROUP_WIDTH),
+				new Groupbox("Misc",{
+					&gESP.nozoom,
+					&gESP.noscope,
+					&gESP.thirdperson,
+					&gESP.visualize_backtrack,
+					&gESP.hands_enabled,
+					&gESP.hands_chams,
+					&gESP.hand_mat_color,
+				}, GROUP_WIDTH),
 
-			new Groupbox("World Modulation",{
-				&gESP.world_enabled,
-				&gESP.world_clr,
-				&gESP.sky_clr,
-			}, GROUP_WIDTH)
-		})
-		);
+				new Groupbox("World Modulation",{
+					&gESP.world_enabled,
+					&gESP.world_clr,
+					&gESP.sky_clr,
+				}, GROUP_WIDTH)
+			})
+			);
 
-	Tabs.AddTab(
-		new Tab("Misc", {
-			new Groupbox("General",
-			{
-				&gMisc.bhop,
-				&gMisc.astrafer,
-				&gMisc.nspam,
-				&gMisc.tauntslide,
-				&gMisc.speedcrouch,
-				&gMisc.nopush,
-				&gMisc.purebypass,
-				&gMisc.cscreenshots,
-			}, GROUP_WIDTH),
+		Tabs.AddTab(
+			new Tab("Misc", {
+				new Groupbox("General",
+				{
+					&gMisc.bhop,
+					&gMisc.astrafer,
+					&gMisc.nspam,
+					&gMisc.tauntslide,
+					&gMisc.speedcrouch,
+					&gMisc.nopush,
+					&gMisc.purebypass,
+					&gMisc.cscreenshots,
+				}, GROUP_WIDTH),
 
-			new Groupbox("Backtrack",
-			{
-				&gMisc.backtrack,
-				&gMisc.backtrack_ticks,
-			}, GROUP_WIDTH),
+				new Groupbox("Backtrack",
+				{
+					&gMisc.backtrack,
+					&gMisc.backtrack_ticks,
+				}, GROUP_WIDTH),
 
-			new Groupbox("Fakelag",
-			{
-				&gMisc.flag,
-				&gMisc.flagamount,
-			}, GROUP_WIDTH),
+				new Groupbox("Fakelag",
+				{
+					&gMisc.flag,
+					&gMisc.flagamount,
+				}, GROUP_WIDTH),
 
-		})
-		);
+			})
+			);
 
-	Tabs.AddTab(
-		new Tab("HvH", {
-			new Groupbox("General",
-			{
-				&gHvH.resolver,
-				&gHvH.resolverkey,
-				&gHvH.antiaim,
-				&gHvH.pitch,
-				&gHvH.yaw,
-			}, GROUP_WIDTH),
+		Tabs.AddTab(
+			new Tab("HvH", {
+				new Groupbox("General",
+				{
+					&gHvH.resolver,
+					&gHvH.resolverkey,
+					&gHvH.antiaim,
+					&gHvH.pitch,
+					&gHvH.yaw,
+				}, GROUP_WIDTH),
 
-		})
-		);
+			})
+			);
 
-	Tabs.AddTab(
-		new Tab("About", {
-			new DrawPanel("About Section", gMenu.style->About, scale.x - TAB_WIDTH - 32, scale.y - MENU_TOPBAR)
-		})
-		);
+		Tabs.AddTab(
+			new Tab("About", {
+				new DrawPanel("About Section", gMenu.style->About, scale.x - TAB_WIDTH - 32, scale.y - MENU_TOPBAR)
+			})
+			);
+	}
+	else
+	{
+		Tabs.AddTab(
+			new Tab("Aimbot", {
+				new Groupbox("General",{
+					&gAim.enabled,
+					&gAim.key,
+					&gAim.hitbox,
+					&gAim.fov,
+					&gAim.smooth,
+					&gAim.silent,
+					&gAim.Autoshoot,
+				}, GROUP_WIDTH),
+			})
+			);
+
+		Tabs.AddTab(
+			new Tab("Triggerbot", {
+				new Groupbox("Hitscan",{
+					&gTrigger.enabled,
+					&gTrigger.key,
+					&gTrigger.headonly,
+				}, GROUP_WIDTH),
+			})
+			);
+
+		Tabs.AddTab(
+			new Tab("Visuals", {
+				new Groupbox("ESP",{
+					&gESP.enabled,
+					&gESP.enemyonly,
+					&gESP.box,
+					&gESP.name,
+					&gESP.health,
+					&gESP.viewlines,
+				}, GROUP_WIDTH),
+				new Groupbox("Misc",{
+					&gESP.nozoom,
+					&gESP.noscope,
+					&gESP.thirdperson,
+					&gESP.visualize_backtrack,
+				}, GROUP_WIDTH),
+			})
+			);
+
+		Tabs.AddTab(
+			new Tab("Misc", {
+				new Groupbox("General",
+				{
+					&gMisc.bhop,
+					&gMisc.astrafer,
+					&gMisc.cscreenshots,
+				}, GROUP_WIDTH),
+
+				new Groupbox("Backtrack",
+				{
+					&gMisc.backtrack,
+					&gMisc.backtrack_ticks,
+				}, GROUP_WIDTH),
+
+				new Groupbox("Time Shift",
+				{
+					&gMisc.sfreezing,
+					&gMisc.sfreezing_key,
+					&gMisc.sfreezing_value,
+				}, GROUP_WIDTH),
+
+				new Groupbox("Fakelag",
+				{
+					&gMisc.flag,
+					&gMisc.flagamount,
+				}, GROUP_WIDTH),
+
+			})
+			);
+
+		Tabs.AddTab(
+			new Tab("HvH", {
+				new Groupbox("General",
+				{
+					&gHvH.resolver,
+					&gHvH.resolverkey,
+					&gHvH.antiaim,
+					&gHvH.pitch,
+					&gHvH.yaw,
+				}, GROUP_WIDTH),
+
+			})
+			);
+
+		Tabs.AddTab(
+			new Tab("About", {
+				new DrawPanel("About Section", gMenu.style->About, scale.x - TAB_WIDTH - 32, scale.y - MENU_TOPBAR)
+			})
+			);
+	}
 }
 
 #define TAB_WIDTH 150

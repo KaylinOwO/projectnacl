@@ -24,7 +24,7 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 	if (pLocal->GetLifeState() != LIFE_ALIVE)
 		return;
 
-	if (tauntslide.value) //This is for some reason broken, I have an idea why just haven't got to trying to fix it.
+	if (GAME_TF2 && tauntslide.value) //This is for some reason broken, I have an idea why just haven't got to trying to fix it.
 	{
 		if ((pLocal->GetCond() & tf_cond::TFCond_Taunting))
 		{
@@ -47,7 +47,7 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 		}
 	}
 
-	if (speedcrouch.value && !(pCommand->buttons & IN_ATTACK) && (pCommand->buttons & IN_DUCK)) // who changed my comment >:(
+	if (GAME_TF2 && speedcrouch.value && !(pCommand->buttons & IN_ATTACK) && (pCommand->buttons & IN_DUCK)) // who changed my comment >:(
 	{
 		Vector vLocalAngles = pCommand->viewangles;
 		float speed = pCommand->forwardmove;
@@ -83,7 +83,7 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 		}
 	}
 
-	if (nopush.value)
+	if (GAME_TF2 && nopush.value)
 	{
 		ConVar* tf_avoidteammates_pushaway = gInts.cvar->FindVar("tf_avoidteammates_pushaway");
 		if (tf_avoidteammates_pushaway->GetInt() == 1)

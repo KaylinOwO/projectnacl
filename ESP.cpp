@@ -201,7 +201,7 @@ void CESP::Player_ESP(CBaseEntity* pLocal, CBaseEntity* pEntity)
 		iY += gDrawManager.GetESPHeight();
 	}
 
-	if (tfclass.value)
+	if (GAME_TF2 && tfclass.value)
 	{
 		gDrawManager.DrawString(x + w + 2, y + iY, clrPlayerCol, "%s", pEntity->szGetClass());
 		iY += gDrawManager.GetESPHeight();
@@ -244,7 +244,7 @@ void CESP::Player_ESP(CBaseEntity* pLocal, CBaseEntity* pEntity)
 		}
 	}
 
-	if (status.value)
+	if (GAME_TF2 && status.value)
 	{
 		switch (pEntity->GetCond())
 		{

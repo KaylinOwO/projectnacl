@@ -9,20 +9,24 @@ namespace backtrack {
 	void backtrack::backtrack_start() {
 		if (g.local == nullptr || g.cmd == nullptr) return;
 
-		CBaseCombatWeapon* local_weapon = g.local->GetActiveWeapon();
-		if (!local_weapon) { return; }
+		if (GAME_TF2)
+		{
+			CBaseCombatWeapon* local_weapon = g.local->GetActiveWeapon();
+			if (!local_weapon) { return; }
+		}
 
 		for (int i = 0; i < gInts.Engine->GetMaxClients(); i++) {
 			CBaseEntity* entity = reinterpret_cast<CBaseEntity*>(gInts.EntList->GetClientEntity(i));
 			if (!entity || entity->IsDormant() || entity->GetLifeState() != LIFE_ALIVE) continue;
 			if (entity->GetTeamNum() == g.local->GetTeamNum()) continue;
 
-			// Quick projectile check, no need to do it as it doesn't work.
-			//if (utilities::is_projectile(g.local, local_weapon)) {
-			//	continue;
-			//}
+			int hitbox = 0;
+			if (GAME_TF2 || GAME_HL2DM)
+				hitbox = 0;
+			else
+				hitbox = 12;
 
-			ticks[i].insert(ticks[i].begin(), tick_record{ entity->GetSimulationTime(), entity->GetHitboxPosition(0) });
+			ticks[i].insert(ticks[i].begin(), tick_record{ entity->GetSimulationTime(), entity->GetHitboxPosition(hitbox) });
 
 			if (ticks[i].size() > gMisc.backtrack_ticks.value) {
 				ticks[i].pop_back();
@@ -37,8 +41,11 @@ namespace backtrack {
 		gInts.Engine->GetViewAngles(view_direction);
 		new_view_direction = Util->AngleVector(view_direction);
 
-		CBaseCombatWeapon* local_weapon = g.local->GetActiveWeapon();
-		if (!local_weapon) { return; }
+		if (GAME_TF2)
+		{
+			CBaseCombatWeapon* local_weapon = g.local->GetActiveWeapon();
+			if (!local_weapon) { return; }
+		}
 
 		int best_target_index = -1; float best_field_of_view = FLT_MAX;
 		for (int i = 0; i < gInts.Engine->GetMaxClients(); i++) {

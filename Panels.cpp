@@ -62,17 +62,19 @@ void __fastcall Hooked_PaintTraverse( PVOID pPanels, int edx, unsigned int vguiP
 				gDraw.Reload();
 				gDrawManager.Reload();
 			}
+
 			gMenu.GetInput();
 			gMenu.Draw();
 			gInts.Panels->SetMouseInputEnabled(vguiPanel, gMenu.enabled);
 			gMenu.EndInput();
 
-
-			if (gMisc.purebypass.value || gESP.player_enabled.value)
+			if (GAME_TF2)
 			{
-				bool check = false;
-				if (!gInts.Engine->IsInGame() && check == false)
+				if (gMisc.purebypass.value || gESP.player_enabled.value)
 				{
+					bool check = false;
+					if (!gInts.Engine->IsInGame() && check == false)
+					{
 						void** pure_addr = nullptr;
 						if (!pure_addr)
 						{
@@ -81,6 +83,7 @@ void __fastcall Hooked_PaintTraverse( PVOID pPanels, int edx, unsigned int vguiP
 							pure_addr = (void*)0;
 
 						check = true;
+					}
 				}
 			}
 
@@ -95,20 +98,22 @@ void __fastcall Hooked_PaintTraverse( PVOID pPanels, int edx, unsigned int vguiP
 			gESP.Run(pLocal);
 
 
-
-			if (gInts.Engine->IsInGame() && gInts.Engine->IsConnected())
+			if (GAME_TF2)
 			{
-			   if (!gESP.noscope.value)
-			     return;
-
-				if (pLocal->GetLifeState() == LIFE_ALIVE && pLocal->GetCond() & tf_cond::TFCond_Zoomed)
+				if (gInts.Engine->IsInGame() && gInts.Engine->IsConnected())
 				{
-					int width, height;
-					gInts.Engine->GetScreenSize(width, height);
-					gDrawManager.DrawLine(width / 2, 0, width / 2, height, Color(0, 0, 0, 255));
-					gDrawManager.DrawLine(0, height / 2, width, height / 2, Color(0, 0, 0, 255));
-				}
+					if (!gESP.noscope.value)
+						return;
 
+					if (pLocal->GetLifeState() == LIFE_ALIVE && pLocal->GetCond() & tf_cond::TFCond_Zoomed)
+					{
+						int width, height;
+						gInts.Engine->GetScreenSize(width, height);
+						gDrawManager.DrawLine(width / 2, 0, width / 2, height, Color(0, 0, 0, 255));
+						gDrawManager.DrawLine(0, height / 2, width, height / 2, Color(0, 0, 0, 255));
+					}
+
+				}
 			}
 		}
 	}
@@ -124,7 +129,8 @@ void Intro( void )
 	{
 		gDrawManager.Initialize(); //Initalize the drawing class.
 		gDraw.Init();
-		gMat.Initialize();
+		if (GAME_TF2)
+			gMat.Initialize();
 		InitTextures();
 		gNetVars.Initialize();
 		gMenu.CreateGUI();

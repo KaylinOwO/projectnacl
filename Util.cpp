@@ -103,6 +103,8 @@ bool CUtil::IsKeyPressedMisc(int i)
 		return GetAsyncKeyState(VK_MENU);
 	case 6: //F
 		return GetAsyncKeyState(0x46);
+	case 7: //E
+		return GetAsyncKeyState(0x45);
 	default:
 		return false;
 	}

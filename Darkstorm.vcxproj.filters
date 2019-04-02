@@ -85,6 +85,9 @@
     <ClCompile Include="Backtrack.cpp">
       <Filter>Modules\Backtrack</Filter>
     </ClCompile>
+    <ClCompile Include="SFreezing.cpp">
+      <Filter>Modules\Sequence Freezing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CDrawManager.h">
@@ -207,6 +210,9 @@
     <ClInclude Include="Triggerbot.h">
       <Filter>Modules\Triggerbot</Filter>
     </ClInclude>
+    <ClInclude Include="SFreezing.h">
+      <Filter>Modules\Sequence Freezing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Headers">
@@ -259,6 +265,9 @@
     </Filter>
     <Filter Include="Modules\Backtrack">
       <UniqueIdentifier>{63f6c6aa-3d00-4a0c-8eb6-41466d8c399b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Modules\Sequence Freezing">
+      <UniqueIdentifier>{58abd9a7-f6b8-4bbd-9065-93c7814d605d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

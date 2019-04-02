@@ -112,6 +112,7 @@
     <ClCompile Include="Offsets.cpp" />
     <ClCompile Include="Panels.cpp" />
     <ClCompile Include="CSignature.cpp" />
+    <ClCompile Include="SFreezing.cpp" />
     <ClCompile Include="Sticky.cpp" />
     <ClCompile Include="Styles.cpp" />
     <ClCompile Include="Triggerbot.cpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="Panels.h" />
     <ClInclude Include="SDK.h" />
     <ClInclude Include="CSignature.h" />
+    <ClInclude Include="SFreezing.h" />
     <ClInclude Include="Sticky.h" />
     <ClInclude Include="studio.h" />
     <ClInclude Include="Styles.h" />

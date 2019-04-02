@@ -94,7 +94,7 @@ void WindowStyle::About(int x, int y, int w, int h)
 	int CenterX = x + (w / 2);
 
 	int dcHeight, dcWidth, iHeight, iWidth;
-	gInts.Surface->GetTextSize(gFonts.arial, L"NaCl is an open-source TF2 project meant to benefit the b1g pasters out there\n", iWidth, iHeight);
+	gInts.Surface->GetTextSize(gFonts.arial, L"NaCl is an open-source project meant to benefit the b1g pasters out there\n", iWidth, iHeight);
 	gDraw.DrawString(CenterX - (iWidth / 2), y + 5, SColor(160), L"NaCl is an open-source TF2 project meant to benefit the b1g pasters out there\n");
 
 	gInts.Surface->GetTextSize(gFonts.calibri_light, L"Project NaCl", dcWidth, dcHeight);
