@@ -21,6 +21,10 @@ std::string repeat(int n, const char* str)
 
 void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 {
+	if (serverlag.value && Util->IsKeyPressedMisc(serverlag_key.value))
+		for (int i = 0; i < (int)serverlag_value.value; i++)
+			gInts.Engine->ServerCmd("use", false);
+
 	if (pLocal->GetLifeState() != LIFE_ALIVE)
 		return;
 

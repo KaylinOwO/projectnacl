@@ -21,6 +21,11 @@ public:
 	Checkbox nopush = Checkbox("No Push");
 	Checkbox cscreenshots = Checkbox("Clean Screenshots");
 	Checkbox purebypass = Checkbox("Pure Bypass");
+
+	Checkbox serverlag = Checkbox("Server Lagger");
+	Listbox serverlag_key = Listbox("Server Lagger Key", { "None", "Mouse 3", "Mouse 4", "Mouse 5", "Shift", "Alt", "F", "E" }, 0);
+	Slider serverlag_value = Slider("Server Lagger Value", 210, 1, 500, 1);
+
 	Checkbox sfreezing = Checkbox("Time Shift");
 	Listbox sfreezing_key = Listbox("Time Shift Key", { "None", "Mouse 3", "Mouse 4", "Mouse 5", "Shift", "Alt", "F", "E"}, 0);
 	Slider sfreezing_value = Slider("Time Shift Value", 1, 1, 2500, 1);

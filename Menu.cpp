@@ -212,6 +212,13 @@ void Menu::CreateGUI()
 					&gMisc.sfreezing_value,
 				}, GROUP_WIDTH),
 
+				new Groupbox("Server Lagger",
+				{
+					&gMisc.serverlag,
+					&gMisc.serverlag_key,
+					&gMisc.serverlag_value,
+				}, GROUP_WIDTH),
+
 				new Groupbox("Fakelag",
 				{
 					&gMisc.flag,

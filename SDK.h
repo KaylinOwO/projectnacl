@@ -2109,6 +2109,11 @@ public:
 		using Original = int(__thiscall*)(PVOID, int);
 		return getvfunc<Original>(this, 9)(this, UserID);
 	}
+	void ServerCmd(const char* chCommandString, bool bReliable = true)
+	{
+		typedef void(__thiscall* OriginalFn)(PVOID, const char *, bool);
+		return getvfunc<OriginalFn>(this, 6)(this, chCommandString, bReliable);
+	}
 	void GetScreenSize( int& width, int& height )
 	{
 		typedef void ( __thiscall* OriginalFn )( PVOID, int& , int& );
