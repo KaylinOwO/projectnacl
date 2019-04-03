@@ -538,7 +538,7 @@ int CAimbot::GetBestHitbox(CBaseEntity* pLocal, CBaseEntity* pEntity)
 {
 	int iBestHitbox = -1;
 
-	if (GAME_TF2 || GAME_HL2DM)
+	if (GAME_TF2)
 	{
 		if (!hitbox.value)
 		{
@@ -546,6 +546,22 @@ int CAimbot::GetBestHitbox(CBaseEntity* pLocal, CBaseEntity* pEntity)
 				iBestHitbox = 0;
 			else
 				iBestHitbox = 4;
+			for (int i = iBestHitbox; i < 17; i++) // int i equals prioritized hitbux, so above we check the weapon so it prioritizes the proper hitbox.
+			{
+				if (Util->IsVisible(pLocal, pEntity, pLocal->GetEyePosition(), pEntity->GetHitboxPosition(i)))
+					return i;
+			}
+		}
+		else if (hitbox.value == 1)
+			iBestHitbox = 0;
+		else if (hitbox.value == 2)
+			iBestHitbox = 4;
+	}
+	else if (GAME_HL2DM)
+	{
+		if (!hitbox.value)
+		{
+			iBestHitbox = 4;
 			for (int i = iBestHitbox; i < 17; i++) // int i equals prioritized hitbux, so above we check the weapon so it prioritizes the proper hitbox.
 			{
 				if (Util->IsVisible(pLocal, pEntity, pLocal->GetEyePosition(), pEntity->GetHitboxPosition(i)))
