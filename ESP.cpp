@@ -323,14 +323,28 @@ void CESP::DrawModelExecute(const DrawModelState_t &state, const ModelRenderInfo
 	{
 		Matptr desiredhands;
 
-		if (gESP.hands_chams.value == 0)
-			desiredhands = gMat.glow;
-		else if (gESP.hands_chams.value == 1)
-			desiredhands = gMat.shaded;
-		else if (gESP.hands_chams.value == 2)
-			desiredhands = gMat.shiny;
-		else if (gESP.hands_chams.value == 3)
-			desiredhands = gMat.wireframe;
+		if (GAME_TF2)
+		{
+			if (gESP.hands_chams.value == 0)
+				desiredhands = gMat.glow;
+			else if (gESP.hands_chams.value == 1)
+				desiredhands = gMat.shaded;
+			else if (gESP.hands_chams.value == 2)
+				desiredhands = gMat.shiny;
+			else if (gESP.hands_chams.value == 3)
+				desiredhands = gMat.wireframe;
+		}
+		else
+		{
+			if (gESP.hands_chams.value == 0)
+				desiredhands = gMat.glowother;
+			else if (gESP.hands_chams.value == 1)
+				desiredhands = gMat.shadedother;
+			else if (gESP.hands_chams.value == 2)
+				desiredhands = gMat.shinyother;
+			else if (gESP.hands_chams.value == 3)
+				desiredhands = gMat.wireframeother;
+		}
 
 		byte localteam = pLocalEntity->GetTeamNum();
 
@@ -358,9 +372,20 @@ void CESP::DrawModelExecute(const DrawModelState_t &state, const ModelRenderInfo
 		if (!(entity = GetBaseEntity(pInfo.entity_index)))
 			return;
 
-		ent_id type = entity->Type();
-		if (type != ent_id::CTFPlayer)
-			return;
+		static std::string sModelStr = "models/player";
+
+		bool bPlayerModel = strstr(pszModelName, sModelStr.data());
+
+		if (GAME_TF2)
+		{
+			ent_id type = entity->Type();
+			if (type != ent_id::CTFPlayer)
+				return;
+		}
+		else
+			if (!bPlayerModel)
+				return;
+
 
 		// Normal visibility will just run once
 		// And "Always" visibility will run twice with the same mat
@@ -368,15 +393,28 @@ void CESP::DrawModelExecute(const DrawModelState_t &state, const ModelRenderInfo
 
 		// Stubbed for now. More materials later.
 		Matptr desired;
-
-		if (gESP.chamsmat.value == 0)
-			desired = gMat.glow;
-		else if (gESP.chamsmat.value == 1)
-			desired = gMat.shaded;
-		else if (gESP.chamsmat.value == 2)
-			desired = gMat.shiny;
-		else if (gESP.chamsmat.value == 3)
-			desired = gMat.wireframe;
+		if (GAME_TF2)
+		{
+			if (gESP.chamsmat.value == 0)
+				desired = gMat.glow;
+			else if (gESP.chamsmat.value == 1)
+				desired = gMat.shaded;
+			else if (gESP.chamsmat.value == 2)
+				desired = gMat.shiny;
+			else if (gESP.chamsmat.value == 3)
+				desired = gMat.wireframe;
+		}
+		else
+		{
+			if (gESP.chamsmat.value == 0)
+				desired = gMat.glowother;
+			else if (gESP.chamsmat.value == 1)
+				desired = gMat.shadedother;
+			else if (gESP.chamsmat.value == 2)
+				desired = gMat.shinyother;
+			else if (gESP.chamsmat.value == 3)
+				desired = gMat.wireframeother;
+		}
 
 		if (!desired)
 			return;

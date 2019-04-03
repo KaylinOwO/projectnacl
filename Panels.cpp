@@ -131,6 +131,8 @@ void Intro( void )
 		gDraw.Init();
 		if (GAME_TF2)
 			gMat.Initialize();
+		else
+			gMat.InititalizeOther();
 		InitTextures();
 		gNetVars.Initialize();
 		gMenu.CreateGUI();

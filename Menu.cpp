@@ -182,12 +182,18 @@ void Menu::CreateGUI()
 					&gESP.name,
 					&gESP.health,
 					&gESP.viewlines,
+					&gESP.player_enabled,
+					&gESP.chamsmat,
+					&gESP.player_mat,
 				}, GROUP_WIDTH),
 				new Groupbox("Misc",{
 					&gESP.nozoom,
 					&gESP.noscope,
 					&gESP.thirdperson,
 					&gESP.visualize_backtrack,
+					&gESP.hands_enabled,
+					&gESP.hands_chams,
+					&gESP.hand_mat_color,
 				}, GROUP_WIDTH),
 
 				new Groupbox("World Modulation",{
