@@ -191,9 +191,6 @@ void Menu::CreateGUI()
 					&gESP.noscope,
 					&gESP.thirdperson,
 					&gESP.visualize_backtrack,
-					&gESP.hands_enabled,
-					&gESP.hands_chams,
-					&gESP.hand_mat_color,
 				}, GROUP_WIDTH),
 
 				new Groupbox("World Modulation",{
