@@ -18,7 +18,8 @@ namespace backtrack {
 		for (int i = 0; i < gInts.Engine->GetMaxClients(); i++) {
 			CBaseEntity* entity = reinterpret_cast<CBaseEntity*>(gInts.EntList->GetClientEntity(i));
 			if (!entity || entity->IsDormant() || entity->GetLifeState() != LIFE_ALIVE) continue;
-			if (entity->GetTeamNum() == g.local->GetTeamNum()) continue;
+			if (gInts.Engine->GetAppId() != 320)
+				if (entity->GetTeamNum() == g.local->GetTeamNum()) continue;
 
 			int hitbox = 0;
 			if (GAME_TF2 || GAME_HL2DM)
@@ -51,7 +52,8 @@ namespace backtrack {
 		for (int i = 0; i < gInts.Engine->GetMaxClients(); i++) {
 			CBaseEntity* entity = reinterpret_cast<CBaseEntity*>(gInts.EntList->GetClientEntity(i));
 			if (!entity || entity->IsDormant() || entity->GetLifeState() != LIFE_ALIVE) continue;
-			if (entity->GetTeamNum() == g.local->GetTeamNum()) continue;
+			if (gInts.Engine->GetAppId() != 320)
+				if (entity->GetTeamNum() == g.local->GetTeamNum()) continue;
 
 			if (ticks[i].empty()) continue;
 
