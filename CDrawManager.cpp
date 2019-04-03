@@ -164,7 +164,7 @@ Color CDrawManager::GetPlayerColor(CBaseEntity* pPlayer)
 		case 3: //BLU
 			return Color(0, 153, 255, 255);
 		default:
-			return Color(0, 0, 0, 0);
+			return Color(0, 153, 255, 255);
 		}
 	}
 
