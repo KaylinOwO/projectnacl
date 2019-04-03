@@ -148,20 +148,44 @@ void Menu::CreateGUI()
 	}
 	else
 	{
-		Tabs.AddTab(
-			new Tab("Aimbot", {
-				new Groupbox("General",{
-					&gAim.enabled,
-					&gAim.key,
-					&gAim.hitbox,
-					&gAim.fov,
-					&gAim.smooth,
-					&gAim.silent,
-					&gAim.Autoshoot,
-					&gAim.aimatteammates,
-				}, GROUP_WIDTH),
-			})
-			);
+		if (GAME_CSS)
+		{
+			Tabs.AddTab(
+				new Tab("Aimbot", {
+					new Groupbox("General",{
+						&gAim.enabled,
+						&gAim.key,
+						&gAim.hitbox,
+						&gAim.fov,
+						&gAim.smooth,
+						&gAim.silent,
+						&gAim.Autoshoot,
+						&gAim.aimatteammates,
+					}, GROUP_WIDTH),
+
+					new Groupbox("Accuracy",{
+						&gAim.antirecoil,
+					}, GROUP_WIDTH),
+				})
+				);
+		}
+		else
+		{
+			Tabs.AddTab(
+				new Tab("Aimbot", {
+					new Groupbox("General",{
+						&gAim.enabled,
+						&gAim.key,
+						&gAim.hitbox,
+						&gAim.fov,
+						&gAim.smooth,
+						&gAim.silent,
+						&gAim.Autoshoot,
+						&gAim.aimatteammates,
+					}, GROUP_WIDTH),
+				})
+				);
+		}
 
 		Tabs.AddTab(
 			new Tab("Triggerbot", {

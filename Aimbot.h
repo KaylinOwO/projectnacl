@@ -23,6 +23,8 @@ public:
 	Checkbox zoomedonly = Checkbox("Zoomed Only");
 	Checkbox aimatteammates = Checkbox("Aim @ Teammates");
 
+	Checkbox antirecoil = Checkbox("Anti-Recoil");
+
 	Listbox hitbox = Listbox("Hitbox", { "Auto", "Head", "Body"}, 0);
 	Checkbox ignorecloaked = Checkbox("Ignore Cloaked");
 	Checkbox ignoredisguised = Checkbox("Ignore Disguised");

@@ -232,22 +232,6 @@ float CAimbot::GetFOV(Vector angle, Vector src, Vector dst)
 	return RAD2DEG(acos(u_dot_v / (pow(mag, 2))));
 }
 
-void CAimbot::w(bool silent, Vector vAngs, CUserCmd* pCommand)
-{
-	if (silent)
-	{
-		ClampAngle(vAngs);
-		Util->SilentMovementFix(pCommand, vAngs);
-		pCommand->viewangles = vAngs;
-
-	}
-	else
-	{
-		pCommand->viewangles = vAngs;
-		gInts.Engine->SetViewAngles(pCommand->viewangles);
-	}
-}
-
 void CAimbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 {
 	Vector m_vOldViewAngle = pCommand->viewangles;
@@ -397,29 +381,40 @@ void CAimbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 		vAngs = pCommand->viewangles - vDelta / smooth.value;
 	}
 
-	if (silent.value)
+	if (GAME_CSS)
 	{
-		if (pCommand->buttons & IN_ATTACK)
+		Vector AimPunch = pLocal->GetVecPunchAngle();
+
+		if (silent.value)
 		{
-			w(true, vAngs, pCommand);
-		}
-		else if (Autoshoot.value)
-		{
-			w(true, vAngs, pCommand);
-			pCommand->buttons |= IN_ATTACK;
+			if (gAim.antirecoil.value)
+				pCommand->viewangles = vAngs - (AimPunch * 2.f);
+			else
+				pCommand->viewangles = vAngs;
 		}
 		else
 		{
-			if (pCommand->buttons & IN_ATTACK)
-				w(true, vAngs, pCommand);
+			pCommand->viewangles = vAngs;
+			gInts.Engine->SetViewAngles(pCommand->viewangles);
+			if (gAim.antirecoil.value)
+				pCommand->viewangles -= (AimPunch * 2.f);
 		}
 	}
 	else
 	{
-		w(silent.value, vAngs, pCommand);
-		if (Autoshoot.value)
-			pCommand->buttons |= IN_ATTACK;
+		if (silent.value)
+		{
+			pCommand->viewangles = vAngs;
+		}
+		else
+		{
+			pCommand->viewangles = vAngs;
+			gInts.Engine->SetViewAngles(pCommand->viewangles);
+		}
 	}
+
+	if (Autoshoot.value)
+		pCommand->buttons |= IN_ATTACK;
 
 
 	FixMove(pCommand, m_vOldViewAngle, m_fOldForwardMove, m_fOldSideMove);

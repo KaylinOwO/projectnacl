@@ -1,5 +1,6 @@
 #include "Misc.h"
 #include "Util.h"
+#include "Aimbot.h"
 #include <chrono>
 #include <sstream>
 
@@ -30,6 +31,15 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 
 	if (pLocal->GetLifeState() != LIFE_ALIVE)
 		return;
+
+	if (GAME_CSS)
+	{
+		if (gAim.antirecoil.value)
+		{
+			Vector AimPunch = pLocal->GetVecPunchAngle();
+			pCommand->viewangles -= (AimPunch * 2.f);
+		}
+	}
 
 	if (GAME_TF2 && tauntslide.value) //This is for some reason broken, I have an idea why just haven't got to trying to fix it.
 	{

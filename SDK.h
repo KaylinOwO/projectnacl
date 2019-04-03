@@ -69,6 +69,7 @@ class CBaseCombatWeapon;
 #define TIME_TO_TICKS(dt) ((int)(0.5f + (float)(dt) / gInts.globals->interval_per_tick))
 #define TICKS_TO_TIME(t) (gInts.globals->interval_per_tick * (t))
 
+#define GAME_CSS gInts.Engine->GetAppId() == 240
 #define GAME_HL2DM gInts.Engine->GetAppId() == 320
 #define GAME_TF2 gInts.Engine->GetAppId() == 440
 
@@ -644,6 +645,11 @@ public:
 	float GetSimulationTime() 
 	{
 		return *reinterpret_cast<float*>(uintptr_t(this) + 0x6C);
+	}
+
+	Vector GetVecPunchAngle()
+	{
+		return *reinterpret_cast<Vector*>(uintptr_t(this) + 0xE48);
 	}
 
 	Vector& GetAbsAngles()
