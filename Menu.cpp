@@ -211,6 +211,12 @@ void Menu::CreateGUI()
 					&gMisc.backtrack_ticks,
 				}, GROUP_WIDTH),
 
+				new Groupbox("Airstuck",
+				{
+					&gMisc.airstuck,
+					&gMisc.airstuck_key,
+				}, GROUP_WIDTH),
+
 				new Groupbox("Time Shift",
 				{
 					&gMisc.sfreezing,

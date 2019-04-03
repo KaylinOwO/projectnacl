@@ -25,6 +25,9 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 		for (int i = 0; i < (int)serverlag_value.value; i++)
 			gInts.Engine->ServerCmd("use", false);
 
+	if (airstuck.value && Util->IsKeyPressedMisc(airstuck_key.value) && !(pCommand->buttons & IN_ATTACK))
+		pCommand->tick_count = INT_MAX;
+
 	if (pLocal->GetLifeState() != LIFE_ALIVE)
 		return;
 

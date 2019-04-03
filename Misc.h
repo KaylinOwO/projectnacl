@@ -26,6 +26,9 @@ public:
 	Listbox serverlag_key = Listbox("Server Lagger Key", { "None", "Mouse 3", "Mouse 4", "Mouse 5", "Shift", "Alt", "F", "E" }, 0);
 	Slider serverlag_value = Slider("Server Lagger Value", 210, 1, 500, 1);
 
+	Checkbox airstuck = Checkbox("Airstuck");
+	Listbox airstuck_key = Listbox("Airstuck Key", { "None", "Mouse 3", "Mouse 4", "Mouse 5", "Shift", "Alt", "F", "E" }, 0);
+
 	Checkbox sfreezing = Checkbox("Time Shift");
 	Listbox sfreezing_key = Listbox("Time Shift Key", { "None", "Mouse 3", "Mouse 4", "Mouse 5", "Shift", "Alt", "F", "E"}, 0);
 	Slider sfreezing_value = Slider("Time Shift Value", 1, 1, 2500, 1);
