@@ -35,6 +35,7 @@ void Menu::CreateGUI()
 					&gAim.Autoshoot,
 					&gAim.waitforcharge,
 					&gAim.zoomedonly,
+					&gAim.aimatteammates,
 				}, GROUP_WIDTH),
 
 				new Groupbox("Ignore List",{
@@ -157,6 +158,7 @@ void Menu::CreateGUI()
 					&gAim.smooth,
 					&gAim.silent,
 					&gAim.Autoshoot,
+					&gAim.aimatteammates,
 				}, GROUP_WIDTH),
 			})
 			);

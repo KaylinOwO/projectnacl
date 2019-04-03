@@ -21,6 +21,7 @@ public:
 	Checkbox Autoshoot = Checkbox("Autoshoot");
 	Checkbox waitforcharge = Checkbox("Wait For Charge");
 	Checkbox zoomedonly = Checkbox("Zoomed Only");
+	Checkbox aimatteammates = Checkbox("Aim @ Teammates");
 
 	Listbox hitbox = Listbox("Hitbox", { "Auto", "Head", "Body"}, 0);
 	Checkbox ignorecloaked = Checkbox("Ignore Cloaked");
