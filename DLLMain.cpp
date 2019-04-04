@@ -78,6 +78,7 @@ DWORD WINAPI dwMainThread( LPVOID lpArguments )
 
 		XASSERT(gInts.Client);
 		XASSERT(gInts.EntList);
+		XASSERT(gInts.EntList2);
 		XASSERT(gInts.Engine);
 		XASSERT(gInts.Surface);
 		XASSERT(gInts.EngineTrace);

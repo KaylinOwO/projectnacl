@@ -414,7 +414,35 @@ void CAimbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 	}
 
 	if (Autoshoot.value)
-		pCommand->buttons |= IN_ATTACK;
+	{
+		if (gInts.Engine->GetAppId() != 440) //super advanced auto pistol code :O
+		{
+			pCommand->buttons |= IN_ATTACK;
+			static bool check = false;
+			CBaseCombatWeapon *pWeapon = pLocal->GetActiveWeaponOther();
+			if (pWeapon->GetMaxClip1() && pLocal->IsAlive())
+			{
+				if (pCommand->buttons & IN_ATTACK)
+				{
+					check = true;
+					{
+						static bool flipFlop = true;
+						if (flipFlop) { pCommand->buttons |= IN_ATTACK; }
+						else { pCommand->buttons &= (~IN_ATTACK); }
+						flipFlop = !flipFlop;
+					}
+				}
+				else
+				{
+					check = false;
+				}
+			}
+		}
+		else
+		{
+			pCommand->buttons |= IN_ATTACK;
+		}
+	}
 
 
 	FixMove(pCommand, m_vOldViewAngle, m_fOldForwardMove, m_fOldSideMove);

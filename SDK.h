@@ -736,6 +736,7 @@ public:
 	int GetCond();
 	Vector GetEyeAngles();
 	CBaseCombatWeapon* GetActiveWeapon();
+	CBaseCombatWeapon* GetActiveWeaponOther();
 	Vector GetCollideableMins();
 	Vector GetCollideableMaxs();
 	Vector GetEyePosition(); //yeah i know its actually view offset, but nobody will notice since you guys are just here to paste

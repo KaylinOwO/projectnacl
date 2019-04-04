@@ -68,6 +68,13 @@ CBaseCombatWeapon* CBaseEntity::GetActiveWeapon()
 	return (CBaseCombatWeapon *)gInts.EntList->GetClientEntityFromHandle(pHandle.GetValue(this));
 }
 
+CBaseCombatWeapon* CBaseEntity::GetActiveWeaponOther()
+{
+	DYNVAR(pHandle, HANDLE, "DT_BaseCombatCharacter", "m_hActiveWeapon");
+	return (CBaseCombatWeapon *)gInts.EntList2->GetClientEntityFromHandle(pHandle.GetValue(this));
+}
+
+
 Vector CBaseEntity::GetCollideableMins()
 {
 	DYNVAR_RETURN(Vector, this, "DT_BaseEntity", "m_Collision", "m_vecMins");

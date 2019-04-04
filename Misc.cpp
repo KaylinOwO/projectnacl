@@ -27,7 +27,10 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 			gInts.Engine->ServerCmd("use", false);
 
 	if (airstuck.value && Util->IsKeyPressedMisc(airstuck_key.value) && !(pCommand->buttons & IN_ATTACK))
+	{
 		pCommand->tick_count = INT_MAX;
+		pCommand->viewangles.z = FLT_MAX; //This is a ghetto way of fixing the camera jittering, idk if this is how most people do it, I just stumbled upon it by accident.
+	}
 
 	if (pLocal->GetLifeState() != LIFE_ALIVE)
 		return;
@@ -38,6 +41,29 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 		{
 			Vector AimPunch = pLocal->GetVecPunchAngle();
 			pCommand->viewangles -= (AimPunch * 2.f);
+		}
+	}
+
+	if (gInts.Engine->GetAppId() != 440) //super advanced auto pistol code :O
+	{
+		static bool check = false;
+		CBaseCombatWeapon *pWeapon = pLocal->GetActiveWeaponOther();
+		if (pWeapon->GetMaxClip1())
+		{
+			if (pCommand->buttons & IN_ATTACK)
+			{
+				check = true;
+				{
+					static bool flipFlop = true;
+					if (flipFlop) { pCommand->buttons |= IN_ATTACK; }
+					else { pCommand->buttons &= (~IN_ATTACK); }
+					flipFlop = !flipFlop;
+				}
+			}
+			else
+			{
+				check = false;
+			}
 		}
 	}
 
