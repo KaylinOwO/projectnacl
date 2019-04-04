@@ -24,6 +24,7 @@ public:
 	Checkbox aimatteammates = Checkbox("Aim @ Teammates");
 
 	Checkbox antirecoil = Checkbox("Anti-Recoil");
+	Checkbox autopistol = Checkbox("Auto Pistol");
 
 	Listbox hitbox = Listbox("Hitbox", { "Auto", "Head", "Body"}, 0);
 	Checkbox ignorecloaked = Checkbox("Ignore Cloaked");

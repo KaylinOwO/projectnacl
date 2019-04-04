@@ -46,23 +46,26 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 
 	if (gInts.Engine->GetAppId() != 440) //super advanced auto pistol code :O
 	{
-		static bool check = false;
-		CBaseCombatWeapon *pWeapon = pLocal->GetActiveWeaponOther();
-		if (pWeapon->GetMaxClip1())
+		if (gAim.autopistol.value)
 		{
-			if (pCommand->buttons & IN_ATTACK)
+			static bool check = false;
+			CBaseCombatWeapon *pWeapon = pLocal->GetActiveWeaponOther();
+			if (pWeapon->GetMaxClip1())
 			{
-				check = true;
+				if (pCommand->buttons & IN_ATTACK)
 				{
-					static bool flipFlop = true;
-					if (flipFlop) { pCommand->buttons |= IN_ATTACK; }
-					else { pCommand->buttons &= (~IN_ATTACK); }
-					flipFlop = !flipFlop;
+					check = true;
+					{
+						static bool flipFlop = true;
+						if (flipFlop) { pCommand->buttons |= IN_ATTACK; }
+						else { pCommand->buttons &= (~IN_ATTACK); }
+						flipFlop = !flipFlop;
+					}
 				}
-			}
-			else
-			{
-				check = false;
+				else
+				{
+					check = false;
+				}
 			}
 		}
 	}

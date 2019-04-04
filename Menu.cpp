@@ -165,6 +165,7 @@ void Menu::CreateGUI()
 
 					new Groupbox("Accuracy",{
 						&gAim.antirecoil,
+						&gAim.autopistol,
 					}, GROUP_WIDTH),
 				})
 				);
@@ -182,6 +183,10 @@ void Menu::CreateGUI()
 						&gAim.silent,
 						&gAim.Autoshoot,
 						&gAim.aimatteammates,
+					}, GROUP_WIDTH),
+
+					new Groupbox("Accuracy",{
+						&gAim.autopistol,
 					}, GROUP_WIDTH),
 				})
 				);
