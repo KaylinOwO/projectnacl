@@ -392,9 +392,21 @@ void CAimbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 		vAngs = pCommand->viewangles - vDelta / smooth.value;
 	}
 
-	if (GAME_CSS)
+	if (GAME_TF2)
 	{
-		Vector AimPunch = pLocal->GetVecPunchAngle();
+		if (silent.value)
+		{
+			pCommand->viewangles = vAngs;
+		}
+		else
+		{
+			pCommand->viewangles = vAngs;
+			gInts.Engine->SetViewAngles(pCommand->viewangles);
+		}
+	}
+	else
+	{
+		Vector AimPunch = pLocal->GetVecPunchAngle(); //Best hope the game you're playing has m_vecPunchAngle lol
 
 		if (silent.value)
 		{
@@ -409,18 +421,6 @@ void CAimbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 			gInts.Engine->SetViewAngles(pCommand->viewangles);
 			if (gAim.antirecoil.value)
 				pCommand->viewangles -= (AimPunch * 2.f);
-		}
-	}
-	else
-	{
-		if (silent.value)
-		{
-			pCommand->viewangles = vAngs;
-		}
-		else
-		{
-			pCommand->viewangles = vAngs;
-			gInts.Engine->SetViewAngles(pCommand->viewangles);
 		}
 	}
 
