@@ -1,4 +1,4 @@
-# Project NaCl For Team Fortress 2
+# Project NaCl
 
 ## VAC Status
 
@@ -16,6 +16,14 @@ NaCl is a potassium edit with new features such as
 * New FOV Based Aimbot
 * New (More) Accurate Triggerbot
 * Player Chams
+
+##Multi-Game Support
+This cheat works on multiple source games, including:
+Team Fortress 2
+Counter-Strike: Source
+Day of Defeat: Source
+Half-Life 1: Deathmatch Source
+Half-Life 2: Deathmatch
 
 ## Credits
 * outizm - Aimbot Improvements
