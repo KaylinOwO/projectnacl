@@ -1,5 +1,6 @@
 #include "Aimbot.h"
 #include "Util.h"
+#include "Misc.h"
 
 bool CAimbot::CanAmbassadorHeadshot(CBaseEntity* pLocal)
 {
@@ -248,9 +249,19 @@ void CAimbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 	if (!Util->IsKeyPressed(key.value))
 		return;
 
+	if (!pLocal->IsAlive())
+		return;
+
 	if (GAME_TF2)
+	{
 		if (!pLocal->GetActiveWeapon())
 			return;
+	}
+	else
+	{
+		if (!pLocal->GetActiveWeaponOther())
+			return;
+	}
 
 	if (GAME_TF2)
 	{
@@ -415,33 +426,11 @@ void CAimbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 
 	if (Autoshoot.value)
 	{
-		if (gInts.Engine->GetAppId() != 440) //super advanced auto pistol code :O
+		if (gInts.Engine->GetAppId() != 440)
 		{
-			if (autopistol.value)
-			{
-				pCommand->buttons |= IN_ATTACK;
-				static bool check = false;
-				CBaseCombatWeapon *pWeapon = pLocal->GetActiveWeaponOther();
-				if (pWeapon->GetMaxClip1() && pLocal->IsAlive())
-				{
-					if (pCommand->buttons & IN_ATTACK)
-					{
-						check = true;
-						{
-							static bool flipFlop = true;
-							if (flipFlop) { pCommand->buttons |= IN_ATTACK; }
-							else { pCommand->buttons &= (~IN_ATTACK); }
-							flipFlop = !flipFlop;
-						}
-					}
-					else
-					{
-						check = false;
-					}
-				}
-			}
-			else
-				pCommand->buttons |= IN_ATTACK;
+			pCommand->buttons |= IN_ATTACK;
+			if (gAim.autopistol.value)
+				gMisc.AutoPistol(pLocal, pCommand);
 		}
 		else
 		{
@@ -536,6 +525,12 @@ int CAimbot::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 					if (waitforcharge.value && ZOOM_BASE_DAMAGE + damage < pEntity->GetHealth())//<
 						return -1;
 			}
+		}
+		else
+		{
+			CBaseCombatWeapon *pWeapon = pLocal->GetActiveWeaponOther();
+			if (!pWeapon->HasAmmo())
+				return -1;
 		}
 
 		float flFOV = GetFOV(pCommand->viewangles, vLocal, vEntity);

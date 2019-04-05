@@ -1,6 +1,7 @@
 #include "Misc.h"
 #include "Util.h"
 #include "Aimbot.h"
+#include "Client.h"
 #include <chrono>
 #include <sstream>
 
@@ -18,6 +19,49 @@ std::string repeat(int n, const char* str)
 	for (int i = 0; i < n; i++)
 		os << str;
 	return os.str();
+}
+
+bool CMisc::CanShoot()
+{
+	CBaseCombatWeapon *pWeapon = g.local->GetActiveWeaponOther();
+	if (!gInts.globals)
+		return false;
+	if (!g.local)
+		return false;
+	if (!g.local->IsAlive())
+		return false;
+	if (!g.local || !pWeapon)
+		return false;
+	if (!pWeapon->HasAmmo())
+		return false;
+
+	return(!((pWeapon->NextPrimaryAttack()) > (g.local->TickBase() * gInts.globals->interval_per_tick)));
+}
+
+void CMisc::AutoPistol(CBaseEntity* pLocal, CUserCmd* pCommand)
+{
+	if (gInts.Engine->GetAppId() != 440) //super advanced auto pistol code :O
+	{
+		static bool check = false;
+		CBaseCombatWeapon *pWeapon = pLocal->GetActiveWeaponOther();
+		if (CanShoot())
+		{
+			if (pCommand->buttons & IN_ATTACK)
+			{
+				check = true;
+				{
+					static bool flipFlop = true;
+					if (flipFlop) { pCommand->buttons |= IN_ATTACK; }
+					else { pCommand->buttons &= (~IN_ATTACK); }
+					flipFlop = !flipFlop;
+				}
+			}
+			else
+			{
+				check = false;
+			}
+		}
+	}
 }
 
 void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
@@ -44,31 +88,8 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 		}
 	}
 
-	if (gInts.Engine->GetAppId() != 440) //super advanced auto pistol code :O
-	{
-		if (gAim.autopistol.value)
-		{
-			static bool check = false;
-			CBaseCombatWeapon *pWeapon = pLocal->GetActiveWeaponOther();
-			if (pWeapon->GetMaxClip1())
-			{
-				if (pCommand->buttons & IN_ATTACK)
-				{
-					check = true;
-					{
-						static bool flipFlop = true;
-						if (flipFlop) { pCommand->buttons |= IN_ATTACK; }
-						else { pCommand->buttons &= (~IN_ATTACK); }
-						flipFlop = !flipFlop;
-					}
-				}
-				else
-				{
-					check = false;
-				}
-			}
-		}
-	}
+	if (gAim.autopistol.value)
+		AutoPistol(pLocal, pCommand);
 
 	if (GAME_TF2 && tauntslide.value) //This is for some reason broken, I have an idea why just haven't got to trying to fix it.
 	{

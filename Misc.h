@@ -12,6 +12,8 @@ class CMisc
 public:
 
 	void Run(CBaseEntity* pLocal, CUserCmd* pCommand);
+	void AutoPistol(CBaseEntity* pLocal, CUserCmd* pCommand);
+	bool CanShoot();
 
 	Checkbox bhop = Checkbox("Bunnyhop");
 	Checkbox astrafer = Checkbox("Autostrafer");
