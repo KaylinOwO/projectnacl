@@ -17,7 +17,7 @@ NaCl is a potassium edit with new features such as
 * New (More) Accurate Triggerbot
 * Player Chams
 
-##Multi-Game Support
+## Multi-Game Support
 This cheat works on multiple source games, including:
 Team Fortress 2
 Counter-Strike: Source
