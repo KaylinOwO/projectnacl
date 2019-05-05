@@ -3,6 +3,9 @@
 
 CTriggerbot gTrigger;
 
+bool didHit = false;
+int iDelay = 0;
+
 void CTriggerbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 {
 
@@ -72,5 +75,18 @@ void CTriggerbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 	if (headonly.value && trace.hitbox != 0)
 		return;
 
-	pCommand->buttons |= IN_ATTACK;
+	if (!delay.value)
+		pCommand->buttons |= IN_ATTACK;
+	else
+	{
+		if (trace.hitbox > -1)
+			didHit = true;
+
+		if (iDelay >= delay.value && didHit)
+		{
+			iDelay = 0;
+			pCommand->buttons |= IN_ATTACK;
+		}
+		iDelay++;
+	}
 }

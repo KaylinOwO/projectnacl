@@ -51,6 +51,7 @@ void Menu::CreateGUI()
 					&gTrigger.enabled,
 					&gTrigger.key,
 					&gTrigger.headonly,
+					&gTrigger.delay,
 					&gTrigger.cloaked,
 				}, GROUP_WIDTH),
 
@@ -198,6 +199,7 @@ void Menu::CreateGUI()
 					&gTrigger.enabled,
 					&gTrigger.key,
 					&gTrigger.headonly,
+					&gTrigger.delay,
 				}, GROUP_WIDTH),
 			})
 			);
