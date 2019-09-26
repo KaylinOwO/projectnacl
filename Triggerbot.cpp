@@ -71,6 +71,9 @@ void CTriggerbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 	if (GAME_TF2)
 		if (cloaked.value && trace.m_pEnt->GetCond() & TFCond_Cloaked)
 			return;
+	
+	if (trace.m_pEnt->GetTeamNum() == pLocal->GetTeamNum())
+		return;
 
 	if (headonly.value && trace.hitbox != 0)
 		return;
