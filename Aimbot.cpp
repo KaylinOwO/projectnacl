@@ -601,7 +601,7 @@ int CAimbot::GetBestHitbox(CBaseEntity* pLocal, CBaseEntity* pEntity)
 		if (!hitbox.value)
 		{
 			if (GAME_CSS)
-				iBestHitbox = 11;
+				iBestHitbox = 12;
 			else
 				iBestHitbox = 10;
 			for (int i = iBestHitbox; i < 17; i++) // int i equals prioritized hitbux, so above we check the weapon so it prioritizes the proper hitbox.
