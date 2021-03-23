@@ -53,7 +53,7 @@ bool CUtil::IsVisible(void* pLocal, void* pEntity, Vector vStart, Vector vEnd)
 
 	gInts.EngineTrace->TraceRay(Ray, MASK_SHOT, &Filter, &Trace);
 
-	return (Trace.m_pEnt == pEntity);
+	return (Trace.m_pEnt == pEntity || Trace.fraction == 1.0);
 }
 
 bool CUtil::IsKeyPressed(int i)
