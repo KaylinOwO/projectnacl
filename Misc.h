@@ -35,6 +35,11 @@ public:
 	Listbox sfreezing_key = Listbox("Time Shift Key", { "None", "Mouse 3", "Mouse 4", "Mouse 5", "Shift", "Alt", "F", "E"}, 0);
 	Slider sfreezing_value = Slider("Time Shift Value", 1, 1, 2500, 1);
 
+	Checkbox doubletap = Checkbox("Doubletap");
+	Checkbox warp = Checkbox("Warp");
+	Listbox warp_key = Listbox("Warp Key", { "None", "Mouse 3", "Mouse 4", "Mouse 5", "Shift", "Alt", "F", "E" }, 0);
+	Listbox warp_charge_key = Listbox("Charge Key", { "None", "Mouse 3", "Mouse 4", "Mouse 5", "Shift", "Alt", "F", "E" }, 0);
+	Slider warp_value = Slider("Value", 1, 1, 64, 1);
 
 	Checkbox backtrack = Checkbox("Backtrack");
 	Slider backtrack_ticks = Slider("Backtrack Ticks", 0, 0, 12, 1);

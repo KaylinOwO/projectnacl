@@ -154,6 +154,9 @@ DWORD WINAPI dwMainThread( LPVOID lpArguments )
 		defRenderHook->HookMethod(&Hooked_DrawModelExecute, 19);
 		defRenderHook->Rehook();
 
+		DWORD CL_Move_ = gSignatures.GetEngineSignature("55 8B EC 83 EC ? 83 3D ? ? ? ? 02 0F 8C ? ? 00 00 E8 ? ? ? 00 84 C0");
+		CL_Move_Detour.Init(CL_Move_, (void*)Hooked_CL_Move);
+
 		HWND thisWindow;
 		while (!(thisWindow = FindWindow("Valve001", NULL)))
 			Sleep(500);

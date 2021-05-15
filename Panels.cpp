@@ -63,10 +63,7 @@ void __fastcall Hooked_PaintTraverse( PVOID pPanels, int edx, unsigned int vguiP
 				gDrawManager.Reload();
 			}
 
-			gMenu.GetInput();
-			gMenu.Draw();
-			gInts.Panels->SetMouseInputEnabled(vguiPanel, gMenu.enabled);
-			gMenu.EndInput();
+	
 
 			if (GAME_TF2)
 			{
@@ -92,13 +89,15 @@ void __fastcall Hooked_PaintTraverse( PVOID pPanels, int edx, unsigned int vguiP
 			if (gScreenSize.iScreenWidth != iWidth || gScreenSize.iScreenHeight != iHeight)
 				gInts.Engine->GetScreenSize(gScreenSize.iScreenWidth, gScreenSize.iScreenHeight);
 
-			if (!pLocal)
-				return;
+			if (pLocal)
+				gESP.Run(pLocal);
 
-			gESP.Run(pLocal);
+			gMenu.GetInput();
+			gMenu.Draw();
+			gInts.Panels->SetMouseInputEnabled(vguiPanel, gMenu.enabled);
+			gMenu.EndInput();
 
-
-			if (GAME_TF2)
+			if (pLocal && GAME_TF2)
 			{
 				if (gInts.Engine->IsInGame() && gInts.Engine->IsConnected())
 				{

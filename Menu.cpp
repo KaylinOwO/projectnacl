@@ -118,6 +118,15 @@ void Menu::CreateGUI()
 					&gMisc.backtrack_ticks,
 				}, GROUP_WIDTH),
 
+				new Groupbox("Warp",
+				{
+					&gMisc.warp,
+					&gMisc.doubletap,
+					&gMisc.warp_key,
+					&gMisc.warp_charge_key,
+					&gMisc.warp_value,
+				}, GROUP_WIDTH),
+
 				new Groupbox("Fakelag",
 				{
 					&gMisc.flag,

@@ -25,6 +25,7 @@ bool Key(INT vKey)
 
 	return false;
 }
+int WarpCharge;
 
 //============================================================================================
 bool __fastcall Hooked_CreateMove(PVOID ClientMode, int edx, float input_sample_frametime, CUserCmd* pCommand)
@@ -39,10 +40,15 @@ bool __fastcall Hooked_CreateMove(PVOID ClientMode, int edx, float input_sample_
 		CBaseEntity* pLocal = GetBaseEntity(me);
 
 		if (!pLocal)
+		{
+			WarpCharge = 0;
 			return bReturn;
+		}
 
 		g.local = reinterpret_cast<CBaseEntity*>(gInts.EntList->GetClientEntity(gInts.Engine->GetLocalPlayer()));
 		g.cmd = pCommand; g.original_cmd = *pCommand;
+
+		if (!g.local->IsAlive() || g.local->IsDormant() || !gInts.Engine->IsInGame() || !gInts.Engine->IsConnected() || gInts.Engine->IsDrawingLoadingImage()) WarpCharge = 0;
 
 		auto base = reinterpret_cast<uintptr_t>(_AddressOfReturnAddress()) - sizeof(uintptr_t);
 		bool& bSendPacket = *(***reinterpret_cast<bool****>(base) - 1);
@@ -58,6 +64,8 @@ bool __fastcall Hooked_CreateMove(PVOID ClientMode, int edx, float input_sample_
 					bSendPacket = true;
 			}
 		}
+
+		g.isfiring = (pCommand->buttons & IN_ATTACK);
 
 		gMisc.Run(pLocal, pCommand);
 		gAim.Run(pLocal, pCommand);
@@ -257,4 +265,60 @@ int __fastcall Hooked_KeyEvent(PVOID CHLClient, int edx, int eventcode, int keyn
 
 	VMTManager &hook = VMTManager::GetHook(CHLClient); // Get a pointer to the instance of your VMTManager with the function GetHook.
 	return hook.GetMethod<int(__thiscall *)(PVOID, int, int, const char *)>(gOffsets.iKeyEventOffset)(CHLClient, eventcode, keynum, currentBinding); // Call the original.
+}
+void FastStop()
+{
+	// Get velocity
+	Vector vel = g.local->GetVelocity();
+
+	static auto sv_friction = gInts.cvar->FindVar("sv_friction");
+	static auto sv_stopspeed = gInts.cvar->FindVar("sv_stopspeed");
+
+	auto speed = vel.Length2D();
+	auto friction = sv_friction->GetFloat();
+	auto control = (speed < sv_stopspeed->GetFloat()) ? sv_stopspeed->GetFloat() : speed;
+	auto drop = control * friction * gInts.globals->interval_per_tick;
+
+	if (speed > drop - 1.0f)
+	{
+		Vector velocity = vel;
+		Vector direction;
+		VectorAngles(vel, direction);
+		float speed = velocity.Length();
+
+		direction.y = g.cmd->viewangles.y - direction.y;
+
+		Vector forward;
+		VectorAngles(direction, forward);
+		Vector negated_direction = forward * -speed;
+
+		g.cmd->forwardmove = negated_direction.x;
+		g.cmd->sidemove = negated_direction.y;
+	}
+	else
+	{
+		g.cmd->forwardmove = g.cmd->sidemove = 0.0f;
+	}
+}
+
+DetourHook CL_Move_Detour;
+
+
+void Hooked_CL_Move(float accumulated_extra_samples, bool bFinalTick) {
+	auto Original = (CL_Move_t)CL_Move_Detour.GetOriginalFunc();
+
+	if ((gMisc.doubletap.value && (GetAsyncKeyState(VK_LBUTTON) || Util->IsKeyPressedMisc(gAim.key.value) && gAim.Autoshoot.value)) || (gMisc.warp.value && Util->IsKeyPressedMisc(gMisc.warp_key.value))) {
+		for (int i = 0; i < WarpCharge; i++)
+		{
+			Original(accumulated_extra_samples, bFinalTick);
+			WarpCharge--;
+		}
+	}
+
+	if (Util->IsKeyPressedMisc(gMisc.warp_charge_key.value) && WarpCharge < gMisc.warp_value.value)
+		WarpCharge++;
+	else
+		Original(accumulated_extra_samples, bFinalTick);
+
+	CL_Move_Detour.RestorePatch();
 }

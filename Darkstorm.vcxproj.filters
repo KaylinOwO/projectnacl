@@ -213,6 +213,12 @@
     <ClInclude Include="SFreezing.h">
       <Filter>Modules\Sequence Freezing</Filter>
     </ClInclude>
+    <ClInclude Include="Detours.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="BytePatch.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Headers">
