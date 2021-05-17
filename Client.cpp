@@ -25,15 +25,19 @@ bool Key(INT vKey)
 
 	return false;
 }
-int WarpCharge;
-
+int WarpCharge = 0;
+bool IsDTing = false;
 //============================================================================================
+
 bool __fastcall Hooked_CreateMove(PVOID ClientMode, int edx, float input_sample_frametime, CUserCmd* pCommand)
 {
 	VMTManager& hook = VMTManager::GetHook(ClientMode); //Get a pointer to the instance of your VMTManager with the function GetHook.
-	bool bReturn = hook.GetMethod<bool(__thiscall*)(PVOID, float, CUserCmd*)>(gOffsets.iCreateMoveOffset)(ClientMode, input_sample_frametime, pCommand); //Call the original.
 	try
 	{
+		g.silenttime = false;
+
+		g.original_cmd = *pCommand;
+
 		if (!pCommand->command_number)
 			return false;
 
@@ -42,34 +46,37 @@ bool __fastcall Hooked_CreateMove(PVOID ClientMode, int edx, float input_sample_
 		if (!pLocal)
 		{
 			WarpCharge = 0;
-			return bReturn;
+			return hook.GetMethod<bool(__thiscall*)(PVOID, float, CUserCmd*)>(gOffsets.iCreateMoveOffset)(ClientMode, input_sample_frametime, pCommand);
 		}
 
 		g.local = reinterpret_cast<CBaseEntity*>(gInts.EntList->GetClientEntity(gInts.Engine->GetLocalPlayer()));
-		g.cmd = pCommand; g.original_cmd = *pCommand;
 
 		if (!g.local->IsAlive() || g.local->IsDormant() || !gInts.Engine->IsInGame() || !gInts.Engine->IsConnected() || gInts.Engine->IsDrawingLoadingImage()) WarpCharge = 0;
 
-		auto base = reinterpret_cast<uintptr_t>(_AddressOfReturnAddress()) - sizeof(uintptr_t);
-		bool& bSendPacket = *(***reinterpret_cast<bool****>(base) - 1);
-
-		if (pLocal->IsAlive())
-		{
-			if (gMisc.flag.value)
-			{
-				auto netchan = gInts.Engine->GetNetChannelInfo();
-				if (netchan->m_nChokedPackets < (int)gMisc.flagamount.value)
-					bSendPacket = false;
-				else
-					bSendPacket = true;
-			}
-		}
+		uintptr_t _bp; __asm mov _bp, ebp;
+		g.sendpacket = (bool*)(***(uintptr_t***)_bp - 1);
 
 		g.isfiring = (pCommand->buttons & IN_ATTACK);
+		if (pLocal->IsAlive())
+		{
+			auto netchan = gInts.Engine->GetNetChannelInfo();
+			if ((gMisc.flag.value && netchan->m_nChokedPackets < (int)gMisc.flagamount.value) || IsDTing && gMisc.CanShoot() && g.isfiring)
+				*g.sendpacket = false;
+			else
+				*g.sendpacket = true;
+		}
+
+
 
 		gMisc.Run(pLocal, pCommand);
+
+		hook.GetMethod<bool(__thiscall*)(PVOID, float, CUserCmd*)>(gOffsets.iCreateMoveOffset)(ClientMode, input_sample_frametime, pCommand);
+
+		Vector oAngles = pCommand->viewangles, Angles = pCommand->viewangles;
+		float oForwrad = pCommand->forwardmove, oSideMove = pCommand->sidemove;
+
 		gAim.Run(pLocal, pCommand);
-		gHvH.Run(pLocal, pCommand, bSendPacket);
+		gHvH.Run(pLocal, pCommand);
 		gTrigger.Run(pLocal, pCommand);
 		gSequenceFreezing.Run(pLocal, pCommand);
 		if (GAME_TF2)
@@ -78,6 +85,30 @@ bool __fastcall Hooked_CreateMove(PVOID ClientMode, int edx, float input_sample_
 			gSticky.Run(pLocal, pCommand);
 		}
 		backtrack::do_backtrack();
+
+		static bool WasSet = false;
+		if (pLocal->GetActiveWeapon())
+		{
+			if (gCvars.aimbot_silent && gAim.IsProjectileWeapon(pLocal, pLocal->GetActiveWeapon()))
+			{
+				if (g.silenttime) {
+					*g.sendpacket = false;
+					WasSet = true;
+				}
+
+				else
+				{
+					if (WasSet)
+					{
+						*g.sendpacket = true;
+						pCommand->viewangles = oAngles;
+						pCommand->sidemove = oSideMove;
+						pCommand->forwardmove = oForwrad;
+						WasSet = false;
+					}
+				}
+			}
+		}
 	}
 	catch (...)
 	{
@@ -211,58 +242,6 @@ typedef void(__thiscall* FrameStageNotify)(void *, ClientFrameStage_t);
 
 int __fastcall Hooked_KeyEvent(PVOID CHLClient, int edx, int eventcode, int keynum, const char *currentBinding)
 {
-	if (eventcode == 1)
-	{
-	/*	if (keynum == 72) //insert
-		{
-			gCheatMenu.bMenuActive = !gCheatMenu.bMenuActive;
-		}
-
-		if (gCheatMenu.bMenuActive)
-		{
-			if (keynum == 88 || keynum == 112) // Up
-			{
-
-				if (gCheatMenu.iMenuIndex > 0) gCheatMenu.iMenuIndex--;
-				else gCheatMenu.iMenuIndex = gCheatMenu.iMenuItems - 1;
-				return 0;
-
-			}
-			else if (keynum == 90 || keynum == 113) // Down
-			{
-				if (gCheatMenu.iMenuIndex < gCheatMenu.iMenuItems - 1) gCheatMenu.iMenuIndex++;
-				else gCheatMenu.iMenuIndex = 0;
-				return 0;
-
-			}
-			else if (keynum == 89 || keynum == 107) // Left
-			{
-				if (gCheatMenu.pMenu[gCheatMenu.iMenuIndex].value)
-				{
-					gCheatMenu.pMenu[gCheatMenu.iMenuIndex].value[0] -= gCheatMenu.pMenu[gCheatMenu.iMenuIndex].flStep;
-					if (gCheatMenu.pMenu[gCheatMenu.iMenuIndex].value[0] < gCheatMenu.pMenu[gCheatMenu.iMenuIndex].flMin)
-						gCheatMenu.pMenu[gCheatMenu.iMenuIndex].value[0] = gCheatMenu.pMenu[gCheatMenu.iMenuIndex].flMax;
-				}
-				return 0;
-
-			}
-			else if (keynum == 91 || keynum == 108) // Right
-			{
-				if (gCheatMenu.pMenu[gCheatMenu.iMenuIndex].value)
-				{
-					gCheatMenu.pMenu[gCheatMenu.iMenuIndex].value[0] += gCheatMenu.pMenu[gCheatMenu.iMenuIndex].flStep;
-					if (gCheatMenu.pMenu[gCheatMenu.iMenuIndex].value[0] > gCheatMenu.pMenu[gCheatMenu.iMenuIndex].flMax)
-						gCheatMenu.pMenu[gCheatMenu.iMenuIndex].value[0] = gCheatMenu.pMenu[gCheatMenu.iMenuIndex].flMin;
-				}
-				return 0;
-
-			}
-
-
-
-		}*/
-	}
-
 	VMTManager &hook = VMTManager::GetHook(CHLClient); // Get a pointer to the instance of your VMTManager with the function GetHook.
 	return hook.GetMethod<int(__thiscall *)(PVOID, int, int, const char *)>(gOffsets.iKeyEventOffset)(CHLClient, eventcode, keynum, currentBinding); // Call the original.
 }
@@ -307,13 +286,16 @@ DetourHook CL_Move_Detour;
 void Hooked_CL_Move(float accumulated_extra_samples, bool bFinalTick) {
 	auto Original = (CL_Move_t)CL_Move_Detour.GetOriginalFunc();
 
+
 	if ((gMisc.doubletap.value && (GetAsyncKeyState(VK_LBUTTON) || Util->IsKeyPressedMisc(gAim.key.value) && gAim.Autoshoot.value)) || (gMisc.warp.value && Util->IsKeyPressedMisc(gMisc.warp_key.value))) {
 		for (int i = 0; i < WarpCharge; i++)
 		{
+			IsDTing = true;
 			Original(accumulated_extra_samples, bFinalTick);
 			WarpCharge--;
 		}
 	}
+	else IsDTing = false;
 
 	if (Util->IsKeyPressedMisc(gMisc.warp_charge_key.value) && WarpCharge < gMisc.warp_value.value)
 		WarpCharge++;

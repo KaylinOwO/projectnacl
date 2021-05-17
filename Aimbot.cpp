@@ -1,6 +1,7 @@
 #include "Aimbot.h"
 #include "Util.h"
 #include "Misc.h"
+#include "Client.h"
 
 bool CAimbot::CanAmbassadorHeadshot(CBaseEntity* pLocal)
 {
@@ -86,24 +87,7 @@ void CAimbot::Projectile(CBaseEntity* local_player, CBaseEntity* entity, CBaseCo
 		}
 		return weapon_gravity;
 	};
-	auto is_projectile_weapon = [&local_player, &local_weapon, &entity, &item_index]() -> bool {
-		auto local_class = local_player->GetClassNum(), weapon_slot = local_weapon->GetSlot();
-		if (local_class == TF2_Demoman || local_class == TF2_Soldier || local_class == TF2_Medic) {
-			if (weapon_slot == 0) {
-				return true;
-			}
-		}
 
-		if (local_class == TF2_Engineer) {
-			if (weapon_slot == 0) {
-				if (item_index == WPN_RescueRanger) {
-					return true;
-				}
-			}
-		}
-
-		return false;
-	};
 	auto distance_to_ground = [&entity]() -> float {
 		if (entity->GetFlags() & FL_ONGROUND) return 0.0f;
 		auto distance_to_ground = [&entity](Vector origin) -> float
@@ -125,7 +109,7 @@ void CAimbot::Projectile(CBaseEntity* local_player, CBaseEntity* entity, CBaseCo
 		float v4 = distance_to_ground(origin + Vector(-10.0f, -10.0f, 0.0f));
 		return min(v1, min(v2, min(v3, v4)));
 	};
-	if (is_projectile_weapon()) {
+	if (IsProjectileWeapon(local_player, local_weapon)) {
 		bool on_ground = entity->GetFlags() & FL_ONGROUND;
 		if (local_player->GetClassNum() == TF2_Medic || local_player->GetClassNum() == TF2_Engineer || local_player->GetClassNum() == TF2_Pyro)
 			vec_hitbox = entity->GetHitboxPosition(4);
@@ -392,52 +376,27 @@ void CAimbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 		vAngs = pCommand->viewangles - vDelta / smooth.value;
 	}
 
-	if (GAME_TF2)
-	{
-		if (silent.value)
-		{
-			pCommand->viewangles = vAngs;
-		}
-		else
-		{
-			pCommand->viewangles = vAngs;
-			gInts.Engine->SetViewAngles(pCommand->viewangles);
-		}
-	}
-	else
-	{
-		Vector AimPunch = pLocal->GetVecPunchAngle(); //Best hope the game you're playing has m_vecPunchAngle lol
-
-		if (silent.value)
-		{
-			if (gAim.antirecoil.value)
-				pCommand->viewangles = vAngs - (AimPunch * 2.f);
-			else
-				pCommand->viewangles = vAngs;
-		}
-		else
-		{
-			pCommand->viewangles = vAngs;
-			gInts.Engine->SetViewAngles(pCommand->viewangles);
-			if (gAim.antirecoil.value)
-				pCommand->viewangles -= (AimPunch * 2.f);
-		}
-	}
-
 	if (Autoshoot.value)
 	{
-		if (gInts.Engine->GetAppId() != 440)
+		pCommand->buttons |= IN_ATTACK;
+		if (GAME_CSS && gAim.autopistol.value)
+			gMisc.AutoPistol(pLocal, pCommand);
+	}
+
+	if ((gMisc.CanShoot() && (pCommand->buttons & IN_ATTACK)) || (smooth.value > 0.0 && !silent.value)) {
+		if (GAME_TF2)
 		{
-			pCommand->buttons |= IN_ATTACK;
-			if (gAim.autopistol.value)
-				gMisc.AutoPistol(pLocal, pCommand);
+			pCommand->viewangles = vAngs;
+			if (!silent.value) gInts.Engine->SetViewAngles(pCommand->viewangles);
+			g.silenttime = true;
 		}
 		else
 		{
-			pCommand->buttons |= IN_ATTACK;
+			Vector AimPunch = pLocal->GetVecPunchAngle(); //Best hope the game you're playing has m_vecPunchAngle lol
+			pCommand->viewangles = gAim.antirecoil.value ? vAngs - (AimPunch * 2.f) : vAngs;
+			if (!silent.value) gInts.Engine->SetViewAngles(pCommand->viewangles);
 		}
 	}
-
 
 	FixMove(pCommand, m_vOldViewAngle, m_fOldForwardMove, m_fOldSideMove);
 }

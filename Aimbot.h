@@ -30,6 +30,27 @@ public:
 	Checkbox ignorecloaked = Checkbox("Ignore Cloaked");
 	Checkbox ignoredisguised = Checkbox("Ignore Disguised");
 
+	bool IsProjectileWeapon(CBaseEntity* pLocal, CBaseCombatWeapon* pWeapon) {
+		auto pLocalClass = pLocal->GetClassNum(), WeaponSlot = pWeapon->GetSlot();
+		if (pLocalClass == TF2_Demoman || pLocalClass == TF2_Soldier || pLocalClass == TF2_Medic)
+		{
+			if (WeaponSlot == 0) {
+				return true;
+			}
+		}
+
+		if (pLocalClass == TF2_Engineer)
+		{
+			if (WeaponSlot == 0) {
+				if (pWeapon->GetItemDefinitionIndex() == WPN_RescueRanger) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	};
+
 private:
 
 	void w(bool silent, Vector vAngs, CUserCmd* pCommand);
@@ -44,6 +65,8 @@ private:
 	int GetBestHitbox(CBaseEntity* pLocal, CBaseEntity* pEntity);
 	
 	bool CanAmbassadorHeadshot(CBaseEntity* pLocal);
+
+
 };
 
 extern CAimbot gAim; //dsajkhfdlksahf

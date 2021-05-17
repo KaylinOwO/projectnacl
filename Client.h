@@ -8,7 +8,8 @@ public:
 	CBaseEntity* local{};
 	CUserCmd* cmd{};
 	CUserCmd original_cmd{};
-	bool isfiring;
+	bool isfiring, silenttime;
+	bool* sendpacket;
 };
 
 struct DrawModelState_t;

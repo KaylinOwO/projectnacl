@@ -1,5 +1,6 @@
 #include "HvH.h"
 #include "Util.h"
+#include "Client.h"
 #include <chrono>
 #include <sstream>
 
@@ -129,7 +130,7 @@ float useEdge(float edgeViewAngle)
 }
 
 
-void CHvH::Run(CBaseEntity* pLocal, CUserCmd* pCommand, bool bSendPacket)
+void CHvH::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 {
 	CUserCmd* pCmd = pCommand;
 	Vector vOldAngles = pCommand->viewangles;
@@ -181,7 +182,7 @@ void CHvH::Run(CBaseEntity* pLocal, CUserCmd* pCommand, bool bSendPacket)
 
 		if (yaw.value == 6) //Fake Sideways Right
 		{
-			if (bSendPacket)
+			if (*g.sendpacket)
 				angles.y += 90.0f;
 			else
 				angles.y += -90.0f;
@@ -189,7 +190,7 @@ void CHvH::Run(CBaseEntity* pLocal, CUserCmd* pCommand, bool bSendPacket)
 
 		if (yaw.value == 7) //Fake Sideways Left
 		{
-			if (bSendPacket)
+			if (*g.sendpacket)
 				angles.y += -90.0f;
 			else
 				angles.y += 90.0f;
@@ -197,13 +198,13 @@ void CHvH::Run(CBaseEntity* pLocal, CUserCmd* pCommand, bool bSendPacket)
 
 		if (yaw.value == 8) //Fake Right
 		{
-			if (bSendPacket) angles.y += -90.0f;
+			if (*g.sendpacket) angles.y += -90.0f;
 			else angles.y += 0.0f;
 		}
 
 		if (yaw.value == 9)//Half Backwards Left
 		{
-			if (bSendPacket)
+			if (*g.sendpacket)
 				angles.y += 135.0f;
 			else
 				angles.y += -135.0f;
@@ -211,7 +212,7 @@ void CHvH::Run(CBaseEntity* pLocal, CUserCmd* pCommand, bool bSendPacket)
 
 		if (yaw.value == 10)//Half Backwards Right
 		{
-			if (bSendPacket)
+			if (*g.sendpacket)
 				angles.y += -135.0f;
 			else
 				angles.y += 135.0f;
@@ -219,7 +220,7 @@ void CHvH::Run(CBaseEntity* pLocal, CUserCmd* pCommand, bool bSendPacket)
 
 		if (yaw.value == 11) //Fake Left
 		{
-			if (bSendPacket)
+			if (*g.sendpacket)
 				angles.y += 90.0f;
 			else
 				angles.y += 0.0f;
@@ -237,11 +238,11 @@ void CHvH::Run(CBaseEntity* pLocal, CUserCmd* pCommand, bool bSendPacket)
 				}
 
 				if (left && !right) {
-					if (bSendPacket) angles.y += -90.0f;
+					if (*g.sendpacket) angles.y += -90.0f;
 					else angles.y += 90.0f;
 				}
 				else if (right && !left) {
-					if (bSendPacket) angles.y += 90.0f;
+					if (*g.sendpacket) angles.y += 90.0f;
 					else angles.y += -90.0f;
 				}
 			}

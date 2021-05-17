@@ -24,18 +24,12 @@ std::string repeat(int n, const char* str)
 bool CMisc::CanShoot()
 {
 	CBaseCombatWeapon *pWeapon = g.local->GetActiveWeaponOther();
-	if (!gInts.globals)
-		return false;
-	if (!g.local)
+	if (!pWeapon)
 		return false;
 	if (!g.local->IsAlive())
 		return false;
-	if (!g.local || !pWeapon)
-		return false;
-	if (!pWeapon->HasAmmo())
-		return false;
 
-	return(!((pWeapon->NextPrimaryAttack()) > (g.local->TickBase() * gInts.globals->interval_per_tick)));
+	return (pWeapon->GetNextPrimaryAttack() < g.local->TickBase() * gInts.globals->interval_per_tick);
 }
 
 void CMisc::AutoPistol(CBaseEntity* pLocal, CUserCmd* pCommand)
@@ -76,16 +70,13 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 		pCommand->viewangles.z = FLT_MAX; //This is a ghetto way of fixing the camera jittering, idk if this is how most people do it, I just stumbled upon it by accident.
 	}
 
-	if (pLocal->GetLifeState() != LIFE_ALIVE)
+	if (!pLocal->IsAlive())
 		return;
 
-	if (GAME_CSS)
+	if (GAME_CSS && gAim.antirecoil.value)
 	{
-		if (gAim.antirecoil.value)
-		{
-			Vector AimPunch = pLocal->GetVecPunchAngle();
-			pCommand->viewangles -= (AimPunch * 2.f);
-		}
+		Vector AimPunch = pLocal->GetVecPunchAngle();
+		pCommand->viewangles -= (AimPunch * 2.f);
 	}
 
 	if (gAim.autopistol.value)

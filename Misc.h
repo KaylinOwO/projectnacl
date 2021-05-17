@@ -56,4 +56,6 @@ private:
 	void AntiAim2();
 };
 
+
+
 extern CMisc gMisc;

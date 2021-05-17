@@ -661,7 +661,7 @@ public:
 
 	int TickBase()
 	{
-		return *reinterpret_cast<int*>(uintptr_t(this) + 0x10EC);
+		DYNVAR_RETURN(int, this, "DT_BasePlayer", "localdata", "m_nTickBase");
 	}
 
 	float GetFlashMaxAlpha()
@@ -1268,11 +1268,10 @@ public:
 		return getvfunc<OriginalFn>(this, 318)(this);
 	}
 
-	float NextPrimaryAttack()
+	float  GetNextPrimaryAttack()
 	{
-		return *reinterpret_cast<float*>(uintptr_t(this) + 0x878);
+		DYNVAR_RETURN(float, this, "DT_BaseCombatWeapon", "LocalActiveWeaponData", "m_flNextPrimaryAttack");
 	}
-
 	float NextAttack()
 	{
 		return *reinterpret_cast<float*>(uintptr_t(this) + 0xC38);
@@ -3009,8 +3008,6 @@ public:
 		return false;
 	}
 };
-
-
 
 #include "steam\ISteamClient017.h"
 #include "steam\ISteamFriends002.h"
